@@ -1,7 +1,28 @@
 function getSpreadsheet_() {
-  return ICOIP_MASTER_CONFIG.SPREADSHEET_ID
-    ? SpreadsheetApp.openById(ICOIP_MASTER_CONFIG.SPREADSHEET_ID)
-    : SpreadsheetApp.getActiveSpreadsheet();
+  var cfgObj = null;
+  if (typeof CONFIG !== 'undefined' && CONFIG) cfgObj = CONFIG;
+  if (!cfgObj && typeof ICOIP_MASTER_CONFIG !== 'undefined' && ICOIP_MASTER_CONFIG) cfgObj = ICOIP_MASTER_CONFIG;
+
+  var cfgId = String((cfgObj && (cfgObj.SPREADSHEET_ID || cfgObj.MASTER_SPREADSHEET_ID || cfgObj.DATA_SPREADSHEET_ID)) || '').trim();
+  if (cfgId) return SpreadsheetApp.openById(cfgId);
+
+  var props = PropertiesService.getScriptProperties();
+  var propId = String(props.getProperty('SPREADSHEET_ID') || props.getProperty('MASTER_SPREADSHEET_ID') || props.getProperty('DATA_SPREADSHEET_ID') || '').trim();
+  if (propId) return SpreadsheetApp.openById(propId);
+
+  var active = SpreadsheetApp.getActiveSpreadsheet();
+  if (active) {
+    props.setProperty('SPREADSHEET_ID', active.getId());
+    props.setProperty('MASTER_SPREADSHEET_ID', active.getId());
+    props.setProperty('DATA_SPREADSHEET_ID', active.getId());
+    return active;
+  }
+
+  var created = SpreadsheetApp.create('ICOIP_Data_' + new Date().getTime());
+  props.setProperty('SPREADSHEET_ID', created.getId());
+  props.setProperty('MASTER_SPREADSHEET_ID', created.getId());
+  props.setProperty('DATA_SPREADSHEET_ID', created.getId());
+  return created;
 }
 
 function getModuleConfig_(moduleCode) {
@@ -13,9 +34,19 @@ function getModuleConfig_(moduleCode) {
   return cfg;
 }
 
-function getOrCreateSheet_(sheetName) {
+function getOrCreateSheet_(name, headers) {
   var ss = getSpreadsheet_();
-  return ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
+  if (!ss) throw new Error('Spreadsheet initialization failed');
+
+  var sh = ss.getSheetByName(name);
+  if (!sh) sh = ss.insertSheet(name);
+
+  if (headers && headers.length) {
+    var current = sh.getLastRow() > 0 ? sh.getRange(1, 1, 1, headers.length).getValues()[0] : [];
+    var same = current.length === headers.length && current.every(function(v, i){ return String(v) === String(headers[i]); });
+    if (!same) sh.getRange(1, 1, 1, headers.length).setValues([headers]);
+  }
+  return sh;
 }
 
 function getPrimarySheet_(cfg) {

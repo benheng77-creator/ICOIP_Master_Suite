@@ -1,0 +1,32 @@
+{
+  "summary": {
+    "OK": 6,
+    "ERROR": 0
+  },
+  "portals": {
+    "00_ICOIP_Master_Suite_Demo": {
+      "status": "OK",
+      "missing": []
+    },
+    "01_ICOIP_Volunteer_Management_Portal": {
+      "status": "OK",
+      "missing": []
+    },
+    "02_ICOIP_Intake_Referral_Portal": {
+      "status": "OK",
+      "missing": []
+    },
+    "03_ICOIP_Counselling_Client_Portal": {
+      "status": "OK",
+      "missing": []
+    },
+    "04_ICOIP_Admin_Portal": {
+      "status": "OK",
+      "missing": []
+    },
+    "05_ICOIP_AI_Training_Curriculum_Portal": {
+      "status": "OK",
+      "missing": []
+    }
+  }
+}

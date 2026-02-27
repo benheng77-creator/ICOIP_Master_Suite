@@ -1,28 +1,31 @@
 
 function getSpreadsheet_() {
-  var cfgObj = null;
-  if (typeof CONFIG !== 'undefined' && CONFIG) cfgObj = CONFIG;
-  if (!cfgObj && typeof ICOIP_MASTER_CONFIG !== 'undefined' && ICOIP_MASTER_CONFIG) cfgObj = ICOIP_MASTER_CONFIG;
-
-  var cfgId = String((cfgObj && (cfgObj.SPREADSHEET_ID || cfgObj.MASTER_SPREADSHEET_ID || cfgObj.DATA_SPREADSHEET_ID)) || '').trim();
+  // 1) Config ID
+  var cfgId = '';
+  if (typeof CONFIG !== 'undefined' && CONFIG) {
+    cfgId = String(CONFIG.SPREADSHEET_ID || CONFIG.MASTER_SPREADSHEET_ID || '').trim();
+  }
   if (cfgId) return SpreadsheetApp.openById(cfgId);
 
+  // 2) Script property ID
   var props = PropertiesService.getScriptProperties();
-  var propId = String(props.getProperty('SPREADSHEET_ID') || props.getProperty('MASTER_SPREADSHEET_ID') || props.getProperty('DATA_SPREADSHEET_ID') || '').trim();
+  var propId = String(
+    props.getProperty('SPREADSHEET_ID') ||
+    props.getProperty('MASTER_SPREADSHEET_ID') ||
+    ''
+  ).trim();
   if (propId) return SpreadsheetApp.openById(propId);
 
+  // 3) Active spreadsheet (bound project)
   var active = SpreadsheetApp.getActiveSpreadsheet();
   if (active) {
     props.setProperty('SPREADSHEET_ID', active.getId());
-    props.setProperty('MASTER_SPREADSHEET_ID', active.getId());
-    props.setProperty('DATA_SPREADSHEET_ID', active.getId());
     return active;
   }
 
+  // 4) Standalone fallback: create one
   var created = SpreadsheetApp.create('ICOIP_Data_' + new Date().getTime());
   props.setProperty('SPREADSHEET_ID', created.getId());
-  props.setProperty('MASTER_SPREADSHEET_ID', created.getId());
-  props.setProperty('DATA_SPREADSHEET_ID', created.getId());
   return created;
 }
 

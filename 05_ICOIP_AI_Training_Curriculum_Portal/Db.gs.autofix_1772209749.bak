@@ -4,11 +4,18 @@ function getSpreadsheet_() {
   if (typeof CONFIG !== 'undefined' && CONFIG) cfgObj = CONFIG;
   if (!cfgObj && typeof ICOIP_MASTER_CONFIG !== 'undefined' && ICOIP_MASTER_CONFIG) cfgObj = ICOIP_MASTER_CONFIG;
 
-  var cfgId = String((cfgObj && (cfgObj.SPREADSHEET_ID || cfgObj.MASTER_SPREADSHEET_ID || cfgObj.DATA_SPREADSHEET_ID)) || '').trim();
+  var cfgId = String(
+    (cfgObj && (cfgObj.SPREADSHEET_ID || cfgObj.MASTER_SPREADSHEET_ID || cfgObj.DATA_SPREADSHEET_ID)) || ''
+  ).trim();
   if (cfgId) return SpreadsheetApp.openById(cfgId);
 
   var props = PropertiesService.getScriptProperties();
-  var propId = String(props.getProperty('SPREADSHEET_ID') || props.getProperty('MASTER_SPREADSHEET_ID') || props.getProperty('DATA_SPREADSHEET_ID') || '').trim();
+  var propId = String(
+    props.getProperty('SPREADSHEET_ID') ||
+    props.getProperty('MASTER_SPREADSHEET_ID') ||
+    props.getProperty('DATA_SPREADSHEET_ID') ||
+    ''
+  ).trim();
   if (propId) return SpreadsheetApp.openById(propId);
 
   var active = SpreadsheetApp.getActiveSpreadsheet();

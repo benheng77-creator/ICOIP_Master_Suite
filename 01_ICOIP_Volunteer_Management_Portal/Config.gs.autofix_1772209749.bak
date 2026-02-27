@@ -1,101 +1,77 @@
 const APP_CONFIG = {
-  "PROJECT_NAME": "ICOIP AI Training & Curriculum Development Portal",
-  "PORTAL_CODE": "TRN",
-  "PRIMARY_SHEET": "TrainingRequests",
+  "PROJECT_NAME": "ICOIP Volunteer Management Portal",
+  "PORTAL_CODE": "VOL",
+  "PRIMARY_SHEET": "Volunteers",
   "AUDIT_SHEET": "AuditLog",
   "USERS_SHEET": "Users",
   "ATTACHMENTS_SHEET": "Attachments",
   "NOTIFICATIONS_SHEET": "Notifications",
   "SPREADSHEET_ID": "",
   "ATTACHMENT_FOLDER_ID": "",
-  "ATTACHMENT_FOLDER_NAME": "TRN_Demo_Attachments",
+  "ATTACHMENT_FOLDER_NAME": "VOL_Demo_Attachments",
   "TIMEZONE": "Asia/Singapore",
   "PROGRAMME_NAME": "Integrated Care & Operations Intelligence Programme (ICOIP)",
   "PROGRAMME_DESCRIPTION": "The Integrated Care & Operations Intelligence Programme (ICOIP) is a unified digital ecosystem that integrates volunteer management, beneficiary intake, counselling services, administrative governance, and AI-powered learning development into a structured operational framework.",
-  "PAGE_TITLE": "AI Training & Curriculum Development Portal",
-  "PAGE_SUBTITLE": "Manage slide requests, curriculum planning, WSQ alignment, and training output readiness.",
+  "PAGE_TITLE": "Volunteer Management Portal",
+  "PAGE_SUBTITLE": "Manage volunteer registration, onboarding, scheduling, engagement tracking, and reporting.",
   "TABLE_COLUMNS": [
     "Record ID",
-    "Programme Title",
-    "Requestor",
-    "Topic",
-    "Audience",
-    "Delivery Mode",
-    "WSQ Alignment",
-    "Output Type",
+    "Volunteer Name",
+    "Email",
+    "Phone",
+    "Volunteer Role",
+    "Preferred Area",
     "Status",
-    "Due Date",
+    "Onboarding Status",
+    "Last Activity Date",
+    "Hours Contributed",
     "Notes",
     "Created At",
     "Updated At"
   ],
   "FORM_FIELDS": [
     {
-      "key": "Programme Title",
-      "label": "Programme Title",
+      "key": "Volunteer Name",
+      "label": "Volunteer Name",
       "input": "text",
       "required": true
     },
     {
-      "key": "Requestor",
-      "label": "Requestor",
-      "input": "text",
+      "key": "Email",
+      "label": "Email",
+      "input": "email",
       "required": true
     },
     {
-      "key": "Topic",
-      "label": "Topic",
+      "key": "Phone",
+      "label": "Phone",
       "input": "text",
-      "required": true
+      "required": false
     },
     {
-      "key": "Audience",
-      "label": "Audience",
+      "key": "Volunteer Role",
+      "label": "Volunteer Role",
       "input": "select",
       "required": true,
       "options": [
-        "Frontline Staff",
-        "Managers",
-        "Volunteers",
-        "Caregivers",
-        "Students",
-        "General Public"
+        "Befriender",
+        "Driver",
+        "Programme Support",
+        "Event Support",
+        "Admin Support"
       ]
     },
     {
-      "key": "Delivery Mode",
-      "label": "Delivery Mode",
+      "key": "Preferred Area",
+      "label": "Preferred Area",
       "input": "select",
       "required": true,
       "options": [
-        "Classroom",
-        "Virtual",
-        "Blended",
-        "Self-paced"
-      ]
-    },
-    {
-      "key": "WSQ Alignment",
-      "label": "WSQ Alignment",
-      "input": "select",
-      "required": true,
-      "options": [
-        "Yes",
-        "Partial",
-        "No"
-      ]
-    },
-    {
-      "key": "Output Type",
-      "label": "Output Type",
-      "input": "select",
-      "required": true,
-      "options": [
-        "Slides",
-        "Facilitator Guide",
-        "Learner Workbook",
-        "Assessment Pack",
-        "Curriculum Map"
+        "Active Ageing",
+        "Counselling Support",
+        "Community Outreach",
+        "Training Events",
+        "Operations"
       ]
     },
     {
@@ -104,17 +80,33 @@ const APP_CONFIG = {
       "input": "select",
       "required": true,
       "options": [
-        "Requested",
-        "In Development",
-        "Ready for Review",
+        "Active",
+        "Inactive",
+        "Pending"
+      ]
+    },
+    {
+      "key": "Onboarding Status",
+      "label": "Onboarding Status",
+      "input": "select",
+      "required": true,
+      "options": [
+        "Pending",
+        "In Progress",
         "Completed"
       ]
     },
     {
-      "key": "Due Date",
-      "label": "Due Date",
+      "key": "Last Activity Date",
+      "label": "Last Activity Date",
       "input": "date",
-      "required": true
+      "required": false
+    },
+    {
+      "key": "Hours Contributed",
+      "label": "Hours Contributed",
+      "input": "number",
+      "required": false
     },
     {
       "key": "Notes",
@@ -126,75 +118,75 @@ const APP_CONFIG = {
   "DASHBOARD_METRICS": [
     {
       "id": "totalRecords",
-      "label": "Total Requests",
+      "label": "Total Volunteers",
       "type": "count"
     },
     {
-      "id": "inDevelopment",
-      "label": "In Development",
+      "id": "statusActive",
+      "label": "Active Volunteers",
       "type": "equals",
       "field": "Status",
-      "value": "In Development"
+      "value": "Active"
     },
     {
-      "id": "readyCount",
-      "label": "Ready for Review",
+      "id": "onboardingPending",
+      "label": "Pending Onboarding",
       "type": "equals",
-      "field": "Status",
-      "value": "Ready for Review"
+      "field": "Onboarding Status",
+      "value": "Pending"
     },
     {
-      "id": "overdueCount",
-      "label": "Overdue",
-      "type": "date_lt_today",
-      "field": "Due Date"
+      "id": "sumHours",
+      "label": "Hours Contributed",
+      "type": "sum",
+      "field": "Hours Contributed"
     }
   ],
   "SAMPLE_ROWS": [
     [
-      "TRN-20260227-001",
-      "Motivational Interviewing Basics",
-      "Ben Heng",
-      "Motivational Interviewing",
-      "Frontline Staff",
-      "Blended",
-      "Yes",
-      "Slides",
-      "In Development",
-      "2026-03-06",
-      "Need trainer notes and activity prompts",
-      "2026-02-24 09:00:00",
-      "2026-02-26 18:25:00"
+      "VOL-20260227-001",
+      "Alicia Tan",
+      "alicia@example.com",
+      "91234567",
+      "Befriender",
+      "Active Ageing",
+      "Active",
+      "Completed",
+      "2026-02-20",
+      24,
+      "Consistent volunteer",
+      "2026-02-01 09:00:00",
+      "2026-02-20 18:20:00"
     ],
     [
-      "TRN-20260227-002",
-      "Volunteer Induction",
-      "Sarah Ng",
-      "Volunteer Service Excellence",
-      "Volunteers",
-      "Virtual",
-      "Partial",
-      "Learner Workbook",
-      "Requested",
-      "2026-03-10",
-      "Simple orientation pack",
-      "2026-02-25 11:30:00",
-      "2026-02-25 11:30:00"
+      "VOL-20260227-002",
+      "Marcus Lee",
+      "marcus@example.com",
+      "98765432",
+      "Event Support",
+      "Community Outreach",
+      "Pending",
+      "Pending",
+      "2026-02-14",
+      6,
+      "Awaiting full briefing",
+      "2026-02-03 11:00:00",
+      "2026-02-14 17:05:00"
     ],
     [
-      "TRN-20260227-003",
-      "Case Notes Quality",
-      "Daniel Teo",
-      "Documentation Standards",
-      "Managers",
-      "Classroom",
-      "Yes",
-      "Facilitator Guide",
-      "Ready for Review",
-      "2026-02-28",
-      "Needs final QA",
-      "2026-02-20 08:15:00",
-      "2026-02-27 12:05:00"
+      "VOL-20260227-003",
+      "Priya Nair",
+      "priya@example.com",
+      "92345678",
+      "Admin Support",
+      "Operations",
+      "Active",
+      "Completed",
+      "2026-02-25",
+      14,
+      "Good with admin work",
+      "2026-02-05 08:45:00",
+      "2026-02-25 19:15:00"
     ]
   ],
   "AUDIT_COLUMNS": [
@@ -251,14 +243,14 @@ const APP_CONFIG = {
       "email": "manager@icoip.demo",
       "fullName": "Grace Tan",
       "role": "Manager",
-      "department": "Learning & Development",
+      "department": "Volunteer Services",
       "status": "Active"
     },
     {
       "email": "officer@icoip.demo",
       "fullName": "Daniel Lee",
       "role": "Officer",
-      "department": "Learning & Development",
+      "department": "Volunteer Services",
       "status": "Active"
     },
     {
@@ -281,14 +273,14 @@ const APP_CONFIG = {
       "manager@icoip.demo",
       "Grace Tan",
       "Manager",
-      "Learning & Development",
+      "Volunteer Services",
       "Active"
     ],
     [
       "officer@icoip.demo",
       "Daniel Lee",
       "Officer",
-      "Learning & Development",
+      "Volunteer Services",
       "Active"
     ],
     [
@@ -335,16 +327,16 @@ const APP_CONFIG = {
     ]
   },
   "WORKFLOW": {
-    "STATUS_FIELD": "Status",
+    "STATUS_FIELD": "Onboarding Status",
     "ACTIONS": [
       {
-        "key": "start_development",
-        "label": "Start Development",
-        "field": "Status",
+        "key": "start_onboarding",
+        "label": "Start Onboarding",
+        "field": "Onboarding Status",
         "from": [
-          "Requested"
+          "Pending"
         ],
-        "to": "In Development",
+        "to": "In Progress",
         "roles": [
           "Admin",
           "Manager",
@@ -352,40 +344,54 @@ const APP_CONFIG = {
         ]
       },
       {
-        "key": "submit_review",
-        "label": "Submit for Review",
-        "field": "Status",
+        "key": "complete_onboarding",
+        "label": "Complete Onboarding",
+        "field": "Onboarding Status",
         "from": [
-          "In Development"
-        ],
-        "to": "Ready for Review",
-        "roles": [
-          "Admin",
-          "Manager",
-          "Officer"
-        ]
-      },
-      {
-        "key": "complete_request",
-        "label": "Complete Request",
-        "field": "Status",
-        "from": [
-          "Ready for Review"
+          "In Progress"
         ],
         "to": "Completed",
+        "roles": [
+          "Admin",
+          "Manager",
+          "Officer"
+        ]
+      },
+      {
+        "key": "reopen_onboarding",
+        "label": "Reopen Onboarding",
+        "field": "Onboarding Status",
+        "from": [
+          "Completed"
+        ],
+        "to": "In Progress",
         "roles": [
           "Admin",
           "Manager"
         ]
       },
       {
-        "key": "reopen_request",
-        "label": "Reopen Request",
+        "key": "activate_volunteer",
+        "label": "Activate Volunteer",
         "field": "Status",
         "from": [
-          "Completed"
+          "Pending",
+          "Inactive"
         ],
-        "to": "In Development",
+        "to": "Active",
+        "roles": [
+          "Admin",
+          "Manager"
+        ]
+      },
+      {
+        "key": "deactivate_volunteer",
+        "label": "Deactivate Volunteer",
+        "field": "Status",
+        "from": [
+          "Active"
+        ],
+        "to": "Inactive",
         "roles": [
           "Admin",
           "Manager"
@@ -394,42 +400,43 @@ const APP_CONFIG = {
     ]
   },
   "ATTACHMENT_CATEGORIES": [
-    "Slide Draft",
-    "Facilitator Guide",
-    "Workbook",
-    "Assessment Pack",
-    "Reference Material",
+    "NRIC/ID Check",
+    "Volunteer Form",
+    "Training Certificate",
+    "Consent Form",
+    "Photo",
     "Other"
   ],
   "NOTIFICATION_TEMPLATES": [
     {
-      "key": "request",
-      "label": "Request received",
-      "subject": "Training request received - {{recordId}}"
+      "key": "welcome",
+      "label": "Welcome / Next Steps",
+      "subject": "Volunteer onboarding update - {{recordId}}"
     },
     {
-      "key": "review",
-      "label": "Ready for review",
-      "subject": "Training output ready for review - {{recordId}}"
+      "key": "schedule",
+      "label": "Volunteer schedule update",
+      "subject": "Volunteer schedule update - {{recordId}}"
     }
   ],
   "SUMMARY_FIELDS": [
-    "Programme Title",
-    "Requestor",
-    "Topic",
-    "Audience",
-    "Delivery Mode",
-    "WSQ Alignment",
-    "Output Type",
+    "Volunteer Name",
+    "Volunteer Role",
+    "Preferred Area",
     "Status",
-    "Due Date",
+    "Onboarding Status",
+    "Hours Contributed",
+    "Last Activity Date",
     "Notes"
   ]
 
+  PRIMARY_COLUMNS: TABLE_COLUMNS,
+  USERS_COLUMNS: USER_COLUMNS,
+  ATTACHMENTS_COLUMNS: ATTACHMENT_COLUMNS,
+  NOTIFICATIONS_COLUMNS: NOTIFICATION_COLUMNS,
 
-
-
-
-
-
+  PRIMARY_COLUMNS: TABLE_COLUMNS,
+  USERS_COLUMNS: USER_COLUMNS,
+  ATTACHMENTS_COLUMNS: ATTACHMENT_COLUMNS,
+  NOTIFICATIONS_COLUMNS: NOTIFICATION_COLUMNS,
 };
