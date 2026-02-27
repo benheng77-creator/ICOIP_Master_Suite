@@ -10,13 +10,15 @@ function getSpreadsheet_() {
   var propId = String(props.getProperty('SPREADSHEET_ID') || props.getProperty('MASTER_SPREADSHEET_ID') || props.getProperty('DATA_SPREADSHEET_ID') || '').trim();
   if (propId) return SpreadsheetApp.openById(propId);
 
-  var active = SpreadsheetApp.getActiveSpreadsheet();
-  if (active) {
-    props.setProperty('SPREADSHEET_ID', active.getId());
-    props.setProperty('MASTER_SPREADSHEET_ID', active.getId());
-    props.setProperty('DATA_SPREADSHEET_ID', active.getId());
-    return active;
-  }
+  try {
+    var active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) {
+      props.setProperty('SPREADSHEET_ID', active.getId());
+      props.setProperty('MASTER_SPREADSHEET_ID', active.getId());
+      props.setProperty('DATA_SPREADSHEET_ID', active.getId());
+      return active;
+    }
+  } catch (e) { Logger.log('getActiveSpreadsheet unavailable: ' + e.message); }
 
   var created = SpreadsheetApp.create('ICOIP_Data_' + new Date().getTime());
   props.setProperty('SPREADSHEET_ID', created.getId());

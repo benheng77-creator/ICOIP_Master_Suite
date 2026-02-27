@@ -51,5 +51,5 @@ function setupProject_(resetData) {
   }
   autoSizeSheet_(noti, APP_CONFIG.NOTIFICATION_COLUMNS.length);
 
-  ss.toast(APP_CONFIG.PROJECT_NAME + ' setup complete', 'ICOIP', 5);
+  try { ss.toast(APP_CONFIG.PROJECT_NAME + ' setup complete', 'ICOIP', 5); } catch (e) { Logger.log(APP_CONFIG.PROJECT_NAME + ' setup complete'); }
 }
