@@ -1,0 +1,601 @@
+<script>
+  const state = {
+    master: window.ICOIP_BOOTSTRAP,
+    currentUser: null,
+    permissions: [],
+    moduleCode: window.ICOIP_INITIAL_MODULE || (window.ICOIP_BOOTSTRAP.moduleOrder || [])[0],
+    moduleConfig: null,
+    records: [],
+    stats: {},
+    moduleCards: [],
+    selectedRecordId: '',
+    selectedBundle: null
+  };
+
+  document.addEventListener('DOMContentLoaded', initApp);
+
+  function initApp() {
+    renderDemoUsers();
+    if (state.master.modules[state.moduleCode]) {
+      applyModuleConfig(state.moduleCode);
+    }
+  }
+
+  function renderDemoUsers() {
+    const wrap = document.getElementById('demoUserGrid');
+    wrap.innerHTML = '';
+    (state.master.demoUsers || []).forEach((user) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'user-card';
+      card.innerHTML = `
+        <div class="eyebrow">${escapeHtml(user.role)}</div>
+        <div class="user-card-title">${escapeHtml(user.fullName)}</div>
+        <div class="user-card-meta">${escapeHtml(user.email)} · ${escapeHtml(user.department || '')}</div>
+        <div class="chip-wrap">
+          ${(state.master.permissions[user.role] || []).map((p) => `<span class="chip">${escapeHtml(p)}</span>`).join('')}
+        </div>
+      `;
+      card.addEventListener('click', () => selectUser(user));
+      wrap.appendChild(card);
+    });
+  }
+
+  function selectUser(user) {
+    state.currentUser = {
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      department: user.department || ''
+    };
+    document.getElementById('loginModal').classList.add('hidden');
+    document.getElementById('appShell').classList.remove('hidden');
+    switchModule(state.moduleCode);
+  }
+
+  function openUserSwitcher() {
+    document.getElementById('loginModal').classList.remove('hidden');
+  }
+
+  function switchModule(moduleCode) {
+    if (!state.master.modules[moduleCode]) return;
+    closeRecordModal();
+    closeDetailModal();
+    closeAttachmentModal();
+    closeEmailModal();
+    state.moduleCode = moduleCode;
+    applyModuleConfig(moduleCode);
+    loadModuleState(document.getElementById('searchInput').value.trim());
+  }
+
+  function applyModuleConfig(moduleCode) {
+    state.moduleConfig = state.master.modules[moduleCode];
+    renderTableHead();
+    buildForm();
+    populateAttachmentCategories();
+    renderModuleBanner();
+  }
+
+  function loadModuleState(searchTerm = '') {
+    google.script.run
+      .withSuccessHandler((response) => {
+        state.permissions = response.permissions || [];
+        state.records = response.records || [];
+        state.stats = response.stats || {};
+        state.currentUser = response.currentUser || state.currentUser;
+        state.moduleCards = response.moduleCards || [];
+        if (response.moduleConfig) {
+          state.moduleConfig = response.moduleConfig;
+          state.master.modules[state.moduleCode] = response.moduleConfig;
+        }
+        renderCurrentUser();
+        renderModuleCards();
+        renderModuleBanner();
+        renderStats();
+        renderTable();
+        renderActivity(response.recentActivity || []);
+        renderNotifications(response.notifications || []);
+        applyPermissionVisibility();
+      })
+      .withFailureHandler(showError)
+      .getModuleState(state.moduleCode, state.currentUser, searchTerm);
+  }
+
+  function renderCurrentUser() {
+    document.getElementById('currentUserName').textContent = state.currentUser.fullName || '';
+    document.getElementById('currentUserMeta').textContent = `${state.currentUser.role || ''} · ${state.currentUser.email || ''}`;
+    document.getElementById('permissionChips').innerHTML = state.permissions.map((p) => `<span class="chip">${escapeHtml(p)}</span>`).join('');
+  }
+
+  function renderModuleCards() {
+    const wrap = document.getElementById('moduleGrid');
+    wrap.innerHTML = '';
+    const cards = state.moduleCards.length ? state.moduleCards : (state.master.moduleOrder || []).map((code) => {
+      const cfg = state.master.modules[code];
+      return {
+        moduleCode: code,
+        title: cfg.pageTitle,
+        subtitle: cfg.pageSubtitle,
+        description: cfg.cardDescription,
+        icon: cfg.cardIcon,
+        totalRecords: 0,
+        primarySheet: cfg.primarySheet
+      };
+    });
+    cards.forEach((card) => {
+      const active = card.moduleCode === state.moduleCode ? ' active' : '';
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'module-card' + active;
+      el.innerHTML = `
+        <div class="module-card-top">
+          <div>
+            <div class="eyebrow">${escapeHtml(card.moduleCode)}</div>
+            <div class="module-title">${escapeHtml(card.title)}</div>
+            <div class="module-subtitle">${escapeHtml(card.description || card.subtitle || '')}</div>
+          </div>
+          <div class="module-icon">${escapeHtml(card.icon || '■')}</div>
+        </div>
+        <div class="module-stat">
+          <div>
+            <div class="muted tiny">Demo records</div>
+            <div class="module-stat-value">${escapeHtml(String(card.totalRecords || 0))}</div>
+          </div>
+          <span class="chip ${card.moduleCode === state.moduleCode ? 'secondary' : ''}">${card.moduleCode === state.moduleCode ? 'Current' : 'Open'}</span>
+        </div>
+      `;
+      el.addEventListener('click', () => switchModule(card.moduleCode));
+      wrap.appendChild(el);
+    });
+  }
+
+  function renderModuleBanner() {
+    const cfg = state.moduleConfig || {};
+    document.getElementById('moduleTitle').textContent = cfg.pageTitle || '';
+    document.getElementById('moduleSubtitle').textContent = cfg.pageSubtitle || '';
+    document.getElementById('moduleMetaCard').innerHTML = `
+      <div class="module-meta-line"><span class="module-meta-key">Module code</span><span class="module-meta-value">${escapeHtml(cfg.portalCode || '')}</span></div>
+      <div class="module-meta-line"><span class="module-meta-key">Primary sheet</span><span class="module-meta-value">${escapeHtml(cfg.primarySheet || '')}</span></div>
+      <div class="module-meta-line"><span class="module-meta-key">Form fields</span><span class="module-meta-value">${escapeHtml(String((cfg.formFields || []).length))}</span></div>
+      <div class="module-meta-line"><span class="module-meta-key">Workflow actions</span><span class="module-meta-value">${escapeHtml(String(((cfg.workflow || {}).actions || []).length))}</span></div>
+    `;
+  }
+
+  function renderStats() {
+    const statsGrid = document.getElementById('statsGrid');
+    statsGrid.innerHTML = '';
+    (state.moduleConfig.dashboardMetrics || []).forEach((metric) => {
+      const card = document.createElement('div');
+      card.className = 'stat-card';
+      const value = state.stats[metric.id] == null ? 0 : state.stats[metric.id];
+      card.innerHTML = `<div class="stat-label">${escapeHtml(metric.label)}</div><div class="stat-value">${escapeHtml(String(value))}</div>`;
+      statsGrid.appendChild(card);
+    });
+  }
+
+  function renderActivity(items) {
+    const wrap = document.getElementById('activityFeed');
+    wrap.innerHTML = items.length ? '' : `<div class="muted">No recent activity.</div>`;
+    items.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = 'timeline-item';
+      el.innerHTML = `
+        <div class="timeline-title">${escapeHtml(item.action || '')}</div>
+        <div>${escapeHtml(item.recordId || 'No record')}</div>
+        <div class="timeline-meta">${escapeHtml(item.fullName || item.email || '')} · ${escapeHtml(item.timestamp || '')}</div>
+      `;
+      wrap.appendChild(el);
+    });
+  }
+
+  function renderNotifications(items) {
+    const wrap = document.getElementById('notificationFeed');
+    wrap.innerHTML = items.length ? '' : `<div class="muted">No notifications sent yet.</div>`;
+    items.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = 'timeline-item';
+      el.innerHTML = `
+        <div class="timeline-title">${escapeHtml(item.subject || '')}</div>
+        <div>${escapeHtml(item.to || '')}</div>
+        <div class="timeline-meta">${escapeHtml(item.deliveryStatus || '')} · ${escapeHtml(item.sentAt || item.triggeredAt || '')}</div>
+      `;
+      wrap.appendChild(el);
+    });
+  }
+
+  function renderTableHead() {
+    const head = document.getElementById('tableHead');
+    head.innerHTML = '';
+    const tr = document.createElement('tr');
+    (state.moduleConfig.tableColumns || []).forEach((column) => {
+      const th = document.createElement('th');
+      th.textContent = column;
+      tr.appendChild(th);
+    });
+    const actionTh = document.createElement('th');
+    actionTh.textContent = 'Actions';
+    tr.appendChild(actionTh);
+    head.appendChild(tr);
+  }
+
+  function renderTable() {
+    const body = document.getElementById('tableBody');
+    body.innerHTML = '';
+    if (!state.records.length) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="${state.moduleConfig.tableColumns.length + 1}" class="muted">No records found.</td>`;
+      body.appendChild(tr);
+    } else {
+      state.records.forEach((record) => {
+        const tr = document.createElement('tr');
+        state.moduleConfig.tableColumns.forEach((column) => {
+          const td = document.createElement('td');
+          const value = record[column] == null ? '' : String(record[column]);
+          td.innerHTML = renderValueBadge(column, value);
+          tr.appendChild(td);
+        });
+        const tdActions = document.createElement('td');
+        tdActions.innerHTML = `
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm" type="button" onclick="openRecordWorkspace('${escapeAttr(record['Record ID'])}')">Open</button>
+            ${can('edit') ? `<button class="btn btn-ghost btn-sm" type="button" onclick="editRecord('${escapeAttr(record['Record ID'])}')">Edit</button>` : ''}
+            ${can('delete') ? `<button class="btn btn-danger btn-sm" type="button" onclick="removeRecord('${escapeAttr(record['Record ID'])}')">Delete</button>` : ''}
+          </div>
+        `;
+        tr.appendChild(tdActions);
+        body.appendChild(tr);
+      });
+    }
+    document.getElementById('recordCountLabel').textContent = `${state.records.length} record${state.records.length === 1 ? '' : 's'} · ${state.moduleConfig.pageTitle}`;
+  }
+
+  function renderValueBadge(column, value) {
+    if (['Status','Priority','Risk Level','Onboarding Status','Eligibility Status','Case Status','Session Status','Follow Up Required','WSQ Alignment','Output Type','Access Level'].includes(column)) {
+      let klass = 'badge';
+      const lowered = String(value || '').toLowerCase();
+      if (['urgent','critical','high','not eligible','cancelled'].includes(lowered)) klass += ' danger';
+      else if (['pending','requested','in review','in progress','ready for review','rescheduled'].includes(lowered)) klass += ' warn';
+      else if (['completed','assigned','eligible','active','yes'].includes(lowered)) klass += ' secondary';
+      return `<span class="${klass}">${escapeHtml(value || '-')}</span>`;
+    }
+    return escapeHtml(value || '-');
+  }
+
+  function buildForm() {
+    const grid = document.getElementById('formGrid');
+    grid.innerHTML = '';
+    (state.moduleConfig.formFields || []).forEach((field) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'form-field' + (field.input === 'textarea' ? ' full' : '');
+      wrap.innerHTML = `<label for="${toInputId(field.key)}">${escapeHtml(field.label)}${field.required ? ' *' : ''}</label>`;
+      let input;
+      if (field.input === 'select') {
+        input = document.createElement('select');
+        input.innerHTML = `<option value="">Select</option>` + (field.options || []).map((o) => `<option value="${escapeAttr(o)}">${escapeHtml(o)}</option>`).join('');
+      } else if (field.input === 'textarea') {
+        input = document.createElement('textarea');
+      } else {
+        input = document.createElement('input');
+        input.type = field.input || 'text';
+      }
+      input.id = toInputId(field.key);
+      input.name = field.key;
+      input.required = !!field.required;
+      wrap.appendChild(input);
+      grid.appendChild(wrap);
+    });
+  }
+
+  function populateAttachmentCategories() {
+    const select = document.getElementById('attachmentCategory');
+    select.innerHTML = (state.moduleConfig.attachmentCategories || []).map((item) => `<option value="${escapeAttr(item)}">${escapeHtml(item)}</option>`).join('');
+  }
+
+  function can(permission) {
+    return state.permissions.indexOf(permission) > -1;
+  }
+
+  function applyPermissionVisibility() {
+    document.getElementById('addBtn').style.display = can('create') ? '' : 'none';
+    document.getElementById('resetModuleBtn').style.display = can('reset') ? '' : 'none';
+    document.getElementById('resetAllBtn').style.display = can('reset') ? '' : 'none';
+  }
+
+  function performSearch() {
+    loadModuleState(document.getElementById('searchInput').value.trim());
+  }
+
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    loadModuleState('');
+  }
+
+  function openRecordModal(record) {
+    if (!can('create') && !can('edit')) return showToast('This role cannot create or edit records.');
+    document.getElementById('recordModalTitle').textContent = record ? `Edit ${state.moduleConfig.pageTitle} Record` : `Add ${state.moduleConfig.pageTitle} Record`;
+    document.getElementById('recordIdField').value = record ? (record['Record ID'] || '') : '';
+    (state.moduleConfig.formFields || []).forEach((field) => {
+      const input = document.getElementById(toInputId(field.key));
+      input.value = record && record[field.key] != null ? record[field.key] : '';
+    });
+    document.getElementById('recordModal').classList.remove('hidden');
+  }
+
+  function closeRecordModal() {
+    document.getElementById('recordModal').classList.add('hidden');
+    document.getElementById('recordForm').reset();
+    document.getElementById('recordIdField').value = '';
+  }
+
+  function editRecord(recordId) {
+    const record = state.records.find((r) => r['Record ID'] === recordId);
+    if (!record) return showToast('Record not found.');
+    openRecordModal(record);
+  }
+
+  function submitRecord(event) {
+    event.preventDefault();
+    const payload = { 'Record ID': document.getElementById('recordIdField').value };
+    (state.moduleConfig.formFields || []).forEach((field) => {
+      payload[field.key] = document.getElementById(toInputId(field.key)).value;
+    });
+
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Saved.');
+        closeRecordModal();
+        loadModuleState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .saveRecord(state.moduleCode, payload, state.currentUser);
+  }
+
+  function removeRecord(recordId) {
+    if (!can('delete')) return showToast('This role cannot delete records.');
+    if (!confirm('Delete this record?')) return;
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Deleted.');
+        loadModuleState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .deleteRecord(state.moduleCode, recordId, state.currentUser);
+  }
+
+  function openRecordWorkspace(recordId) {
+    state.selectedRecordId = recordId;
+    google.script.run
+      .withSuccessHandler((bundle) => {
+        state.selectedBundle = bundle;
+        renderRecordWorkspace(bundle);
+        document.getElementById('detailModal').classList.remove('hidden');
+      })
+      .withFailureHandler(showError)
+      .getRecordBundle(state.moduleCode, recordId, state.currentUser);
+  }
+
+  function renderRecordWorkspace(bundle) {
+    const record = bundle.record || {};
+    document.getElementById('detailTitle').textContent = `${state.moduleConfig.pageTitle} Workspace`;
+    document.getElementById('detailSubtitle').textContent = `${record['Record ID'] || ''}`;
+    const summaryGrid = document.getElementById('summaryGrid');
+    const fields = state.moduleConfig.summaryFields && state.moduleConfig.summaryFields.length ? state.moduleConfig.summaryFields : state.moduleConfig.tableColumns;
+    summaryGrid.innerHTML = fields.map((field) => `
+      <div class="summary-card">
+        <div class="summary-label">${escapeHtml(field)}</div>
+        <div class="summary-value">${escapeHtml(record[field] == null ? '' : String(record[field]))}</div>
+      </div>
+    `).join('');
+
+    const detailButtons = document.getElementById('detailButtons');
+    detailButtons.innerHTML = `
+      ${can('edit') ? `<button class="btn btn-secondary btn-sm" type="button" onclick="editRecord('${escapeAttr(record['Record ID'])}')">Edit Record</button>` : ''}
+      ${can('email') ? `<button class="btn btn-secondary btn-sm" type="button" onclick="openEmailModal()">Send Email</button>` : ''}
+      ${can('export') ? `<button class="btn btn-ghost btn-sm" type="button" onclick="openPrintableView()">Print / PDF</button>` : ''}
+    `;
+
+    const workflowButtons = document.getElementById('workflowButtons');
+    workflowButtons.innerHTML = bundle.quickActions && bundle.quickActions.length
+      ? bundle.quickActions.map((action) => `<button class="btn btn-primary btn-sm" type="button" onclick="runWorkflowAction('${escapeAttr(action.key)}')">${escapeHtml(action.label)}</button>`).join('')
+      : `<div class="muted">No workflow actions available for this record and role.</div>`;
+
+    const attachmentList = document.getElementById('attachmentList');
+    attachmentList.innerHTML = bundle.attachments && bundle.attachments.length
+      ? bundle.attachments.map((item) => `
+          <div class="mini-item">
+            <div><strong>${escapeHtml(item.fileName)}</strong></div>
+            <div class="muted">${escapeHtml(item.category)} · ${escapeHtml(formatBytes(item.fileSize || 0))}</div>
+            <div class="timeline-meta">${escapeHtml(item.uploadedBy || '')} · ${escapeHtml(item.uploadedAt || '')}</div>
+            <div style="margin-top:8px;"><a href="${escapeAttr(item.driveUrl)}" target="_blank">Open file</a></div>
+          </div>
+        `).join('')
+      : `<div class="muted">No attachments uploaded yet.</div>`;
+
+    const timeline = document.getElementById('recordTimeline');
+    timeline.innerHTML = bundle.timeline && bundle.timeline.length
+      ? bundle.timeline.map((item) => `
+          <div class="timeline-item">
+            <div class="timeline-title">${escapeHtml(item.action)}</div>
+            <div class="timeline-meta">${escapeHtml(item.fullName || item.email || '')} · ${escapeHtml(item.role || '')} · ${escapeHtml(item.timestamp || '')}</div>
+          </div>
+        `).join('')
+      : `<div class="muted">No timeline entries yet.</div>`;
+  }
+
+  function closeDetailModal() {
+    document.getElementById('detailModal').classList.add('hidden');
+    state.selectedRecordId = '';
+    state.selectedBundle = null;
+  }
+
+  function runWorkflowAction(actionKey) {
+    if (!can('workflow')) return showToast('This role cannot run workflow actions.');
+    const note = document.getElementById('workflowNote').value.trim();
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Workflow updated.');
+        openRecordWorkspace(state.selectedRecordId);
+        loadModuleState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .transitionRecord(state.moduleCode, state.selectedRecordId, actionKey, note, state.currentUser);
+  }
+
+  function openAttachmentModal() {
+    if (!can('upload')) return showToast('This role cannot upload attachments.');
+    if (!state.selectedRecordId) return showToast('Open a record first.');
+    document.getElementById('attachmentModal').classList.remove('hidden');
+  }
+
+  function closeAttachmentModal() {
+    document.getElementById('attachmentModal').classList.add('hidden');
+    document.getElementById('attachmentForm').reset();
+  }
+
+  function submitAttachment(event) {
+    event.preventDefault();
+    const fileInput = document.getElementById('attachmentFile');
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return showToast('Please choose a file.');
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      const base64Data = String(reader.result).split(',')[1];
+      google.script.run
+        .withSuccessHandler((response) => {
+          showToast(response.message || 'Attachment uploaded.');
+          closeAttachmentModal();
+          openRecordWorkspace(state.selectedRecordId);
+          loadModuleState(document.getElementById('searchInput').value.trim());
+        })
+        .withFailureHandler(showError)
+        .uploadAttachment(state.moduleCode, {
+          recordId: state.selectedRecordId,
+          fileName: file.name,
+          mimeType: file.type,
+          base64Data: base64Data,
+          category: document.getElementById('attachmentCategory').value,
+          description: document.getElementById('attachmentDescription').value
+        }, state.currentUser);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function openEmailModal() {
+    if (!can('email')) return showToast('This role cannot send notifications.');
+    const record = state.selectedBundle && state.selectedBundle.record ? state.selectedBundle.record : null;
+    if (!record) return showToast('Open a record first.');
+    const template = (state.moduleConfig.notificationTemplates || [])[0] || { subject: `${state.selectedRecordId} update` };
+    document.getElementById('emailTo').value = guessEmailRecipient(record);
+    document.getElementById('emailCc').value = '';
+    document.getElementById('emailSubject').value = (template.subject || `${state.selectedRecordId} update`).replace('{{recordId}}', state.selectedRecordId);
+    document.getElementById('emailMessage').value = `Hello,\n\nThis is a demo notification from ${state.moduleConfig.pageTitle}.\n\nPlease review the latest update for record ${state.selectedRecordId}.`;
+    document.getElementById('emailModal').classList.remove('hidden');
+  }
+
+  function closeEmailModal() {
+    document.getElementById('emailModal').classList.add('hidden');
+    document.getElementById('emailForm').reset();
+  }
+
+  function submitEmail(event) {
+    event.preventDefault();
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Email sent.');
+        closeEmailModal();
+        loadModuleState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .sendRecordEmail(state.moduleCode, {
+        recordId: state.selectedRecordId,
+        to: document.getElementById('emailTo').value.trim(),
+        cc: document.getElementById('emailCc').value.trim(),
+        subject: document.getElementById('emailSubject').value.trim(),
+        message: document.getElementById('emailMessage').value.trim()
+      }, state.currentUser);
+  }
+
+  function guessEmailRecipient(record) {
+    const fields = ['Email','Contact','Requestor'];
+    for (const field of fields) {
+      const value = record && record[field] ? String(record[field]) : '';
+      if (value.indexOf('@') > -1) return value;
+    }
+    return 'demo-recipient@example.com';
+  }
+
+  function openPrintableView() {
+    if (!can('export')) return showToast('This role cannot export.');
+    google.script.run
+      .withSuccessHandler((url) => {
+        if (!url) return showToast('Deploy as web app first to enable print view.');
+        window.open(url, '_blank');
+      })
+      .withFailureHandler(showError)
+      .getPrintableUrl(state.moduleCode, state.selectedRecordId);
+  }
+
+  function resetModuleData() {
+    if (!can('reset')) return showToast('Only Admin can reset demo data.');
+    if (!confirm(`Reset the demo data for ${state.moduleConfig.pageTitle}?`)) return;
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Module reset done.');
+        closeDetailModal();
+        loadModuleState('');
+      })
+      .withFailureHandler(showError)
+      .resetModuleDemoData(state.moduleCode, state.currentUser);
+  }
+
+  function resetAllData() {
+    if (!can('reset')) return showToast('Only Admin can reset demo data.');
+    if (!confirm('Reset all demo data in the ICOIP master suite?')) return;
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'All demo data reset done.');
+        closeDetailModal();
+        loadModuleState('');
+      })
+      .withFailureHandler(showError)
+      .resetAllDemoData(state.currentUser);
+  }
+
+  function showError(error) {
+    showToast(error && error.message ? error.message : 'Something went wrong.');
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.add('hidden'), 2600);
+  }
+
+  function toInputId(key) {
+    return 'fld_' + key.replace(/[^a-zA-Z0-9]+/g, '_').toLowerCase();
+  }
+
+  function escapeHtml(text) {
+    return String(text == null ? '' : text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeAttr(text) {
+    return escapeHtml(text);
+  }
+
+  function formatBytes(bytes) {
+    const n = Number(bytes || 0);
+    if (!n) return '0 B';
+    if (n < 1024) return `${n} B`;
+    if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+    return `${(n / 1024 / 1024).toFixed(2)} MB`;
+  }
+</script>

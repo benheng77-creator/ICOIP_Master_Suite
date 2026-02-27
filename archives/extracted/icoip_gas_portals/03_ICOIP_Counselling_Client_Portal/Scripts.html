@@ -1,0 +1,295 @@
+<script>
+  const state = {
+    config: window.APP_BOOTSTRAP,
+    stats: {},
+    records: [],
+    searchTerm: '',
+    editId: ''
+  };
+
+  document.addEventListener('DOMContentLoaded', initApp);
+
+  function initApp() {
+    renderStaticCopy();
+    buildTableHeader();
+    buildForm();
+    bindEvents();
+    loadAppState();
+  }
+
+  function bindEvents() {
+    document.getElementById('addRecordBtn').addEventListener('click', () => openModal());
+    document.getElementById('refreshBtn').addEventListener('click', loadAppState);
+    document.getElementById('setupBtn').addEventListener('click', resetDemoData);
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
+    document.getElementById('clearSearchBtn').addEventListener('click', clearSearch);
+    document.getElementById('searchInput').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch();
+      }
+    });
+    document.getElementById('recordForm').addEventListener('submit', submitForm);
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    document.getElementById('cancelBtn').addEventListener('click', closeModal);
+    document.getElementById('recordModal').addEventListener('click', (event) => {
+      if (event.target.id === 'recordModal') closeModal();
+    });
+  }
+
+  function renderStaticCopy() {
+    document.getElementById('pageTitle').textContent = state.config.pageTitle;
+    document.getElementById('pageSubtitle').textContent = state.config.pageSubtitle;
+    document.getElementById('programmeDescription').textContent = state.config.programmeDescription;
+  }
+
+  function buildTableHeader() {
+    const headRow = document.getElementById('tableHeadRow');
+    headRow.innerHTML = '';
+    state.config.tableColumns.forEach((column) => {
+      const th = document.createElement('th');
+      th.textContent = column;
+      headRow.appendChild(th);
+    });
+
+    const th = document.createElement('th');
+    th.textContent = 'Actions';
+    headRow.appendChild(th);
+  }
+
+  function buildForm() {
+    const formGrid = document.getElementById('formGrid');
+    formGrid.innerHTML = '';
+
+    state.config.formFields.forEach((field) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'form-field' + (field.input === 'textarea' ? ' full' : '');
+
+      const label = document.createElement('label');
+      label.setAttribute('for', toInputId(field.key));
+      label.innerHTML = field.label + (field.required ? ' <span class="required">*</span>' : '');
+      wrapper.appendChild(label);
+
+      let input;
+      if (field.input === 'select') {
+        input = document.createElement('select');
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = 'Select';
+        input.appendChild(defaultOpt);
+        (field.options || []).forEach((optionValue) => {
+          const opt = document.createElement('option');
+          opt.value = optionValue;
+          opt.textContent = optionValue;
+          input.appendChild(opt);
+        });
+      } else if (field.input === 'textarea') {
+        input = document.createElement('textarea');
+      } else {
+        input = document.createElement('input');
+        input.type = field.input || 'text';
+      }
+
+      input.id = toInputId(field.key);
+      input.name = field.key;
+      input.required = !!field.required;
+      wrapper.appendChild(input);
+      formGrid.appendChild(wrapper);
+    });
+  }
+
+  function loadAppState() {
+    google.script.run
+      .withSuccessHandler((response) => {
+        state.stats = response.stats || {};
+        state.records = response.records || [];
+        renderStats();
+        renderTable();
+      })
+      .withFailureHandler(showError)
+      .getAppState();
+  }
+
+  function performSearch() {
+    const term = document.getElementById('searchInput').value.trim();
+    state.searchTerm = term;
+
+    google.script.run
+      .withSuccessHandler((records) => {
+        state.records = records || [];
+        renderTable();
+      })
+      .withFailureHandler(showError)
+      .listRecords(term);
+  }
+
+  function clearSearch() {
+    state.searchTerm = '';
+    document.getElementById('searchInput').value = '';
+    loadAppState();
+  }
+
+  function renderStats() {
+    const statsGrid = document.getElementById('statsGrid');
+    statsGrid.innerHTML = '';
+
+    state.config.dashboardMetrics.forEach((metric) => {
+      const value = state.stats[metric.id] == null ? 0 : state.stats[metric.id];
+      const card = document.createElement('div');
+      card.className = 'stat-card';
+      card.innerHTML = `
+        <div class="stat-label">${escapeHtml(metric.label)}</div>
+        <div class="stat-value">${escapeHtml(String(value))}</div>
+      `;
+      statsGrid.appendChild(card);
+    });
+  }
+
+  function renderTable() {
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+
+    if (!state.records.length) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="${state.config.tableColumns.length + 1}" class="muted">No records found.</td>`;
+      tableBody.appendChild(tr);
+    } else {
+      state.records.forEach((record) => {
+        const tr = document.createElement('tr');
+
+        state.config.tableColumns.forEach((column) => {
+          const td = document.createElement('td');
+          const value = record[column] == null ? '' : String(record[column]);
+          td.innerHTML = shouldTag(column) ? `<span class="tag">${escapeHtml(value || '-')}</span>` : escapeHtml(value || '-');
+          tr.appendChild(td);
+        });
+
+        const actions = document.createElement('td');
+        actions.innerHTML = `
+          <div class="actions">
+            <button class="btn btn-secondary" type="button" onclick="editRecord('${escapeAttr(record['Record ID'])}')">Edit</button>
+            <button class="btn btn-ghost" type="button" onclick="removeRecord('${escapeAttr(record['Record ID'])}')">Delete</button>
+          </div>
+        `;
+        tr.appendChild(actions);
+        tableBody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('recordCountLabel').textContent = `${state.records.length} record${state.records.length === 1 ? '' : 's'}`;
+  }
+
+  function shouldTag(columnName) {
+    return ['Status', 'Priority', 'Risk Level', 'Onboarding Status', 'Eligibility Status', 'Session Status', 'Follow Up Required', 'WSQ Alignment', 'Output Type', 'Access Level'].includes(columnName);
+  }
+
+  function openModal(record) {
+    state.editId = record && record['Record ID'] ? record['Record ID'] : '';
+    document.getElementById('modalTitle').textContent = state.editId ? 'Edit Record' : 'Add Record';
+    document.getElementById('recordIdField').value = state.editId || '';
+
+    state.config.formFields.forEach((field) => {
+      const input = document.getElementById(toInputId(field.key));
+      input.value = record && record[field.key] != null ? record[field.key] : '';
+    });
+
+    document.getElementById('recordModal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('recordModal').classList.add('hidden');
+    document.getElementById('recordForm').reset();
+    document.getElementById('recordIdField').value = '';
+    state.editId = '';
+  }
+
+  function editRecord(recordId) {
+    google.script.run
+      .withSuccessHandler((record) => {
+        if (!record) return showToast('Record not found.');
+        openModal(record);
+      })
+      .withFailureHandler(showError)
+      .getRecordById(recordId);
+  }
+
+  function removeRecord(recordId) {
+    const yes = confirm('Delete this record?');
+    if (!yes) return;
+
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Record deleted.');
+        loadAppState();
+      })
+      .withFailureHandler(showError)
+      .deleteRecord(recordId);
+  }
+
+  function submitForm(event) {
+    event.preventDefault();
+    const payload = { 'Record ID': document.getElementById('recordIdField').value || '' };
+
+    state.config.formFields.forEach((field) => {
+      const input = document.getElementById(toInputId(field.key));
+      payload[field.key] = input.value;
+    });
+
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Saved.');
+        closeModal();
+        if (state.searchTerm) {
+          performSearch();
+        } else {
+          loadAppState();
+        }
+      })
+      .withFailureHandler(showError)
+      .saveRecord(payload);
+  }
+
+  function resetDemoData() {
+    const yes = confirm('Reset this demo to the seeded sample data?');
+    if (!yes) return;
+
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Demo data reset.');
+        loadAppState();
+      })
+      .withFailureHandler(showError)
+      .setupProject();
+  }
+
+  function toInputId(name) {
+    return 'field_' + name.replace(/[^a-zA-Z0-9]+/g, '_').toLowerCase();
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function escapeAttr(value) {
+    return escapeHtml(value);
+  }
+
+  function showError(error) {
+    const message = error && error.message ? error.message : String(error || 'Unknown error');
+    showToast(message);
+    console.error(error);
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    window.clearTimeout(showToast._timer);
+    showToast._timer = window.setTimeout(() => toast.classList.add('hidden'), 3000);
+  }
+</script>

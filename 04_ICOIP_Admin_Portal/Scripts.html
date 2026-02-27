@@ -1,0 +1,506 @@
+<script>
+  const state = {
+    config: window.APP_CONFIG,
+    currentUser: null,
+    permissions: [],
+    records: [],
+    stats: {},
+    selectedRecordId: '',
+    selectedBundle: null
+  };
+
+  document.addEventListener('DOMContentLoaded', initApp);
+
+  function initApp() {
+    document.getElementById('pageTitle').textContent = state.config.pageTitle;
+    document.getElementById('pageSubtitle').textContent = state.config.pageSubtitle;
+    renderDemoUsers();
+    renderTableHead();
+    buildForm();
+    populateAttachmentCategories();
+  }
+
+  function renderDemoUsers() {
+    const wrap = document.getElementById('demoUserGrid');
+    wrap.innerHTML = '';
+    (state.config.demoUsers || []).forEach((user) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'user-card';
+      card.innerHTML = `
+        <div class="eyebrow">${escapeHtml(user.role)}</div>
+        <div class="user-card-title">${escapeHtml(user.fullName)}</div>
+        <div class="user-card-meta">${escapeHtml(user.email)} · ${escapeHtml(user.department || '')}</div>
+        <div class="chip-wrap">
+          ${(state.config.permissions[user.role] || []).map((p) => `<span class="chip">${escapeHtml(p)}</span>`).join('')}
+        </div>
+      `;
+      card.addEventListener('click', () => selectUser(user));
+      wrap.appendChild(card);
+    });
+  }
+
+  function selectUser(user) {
+    state.currentUser = {
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      department: user.department || ''
+    };
+    document.getElementById('loginModal').classList.add('hidden');
+    document.getElementById('appShell').classList.remove('hidden');
+    loadAppState();
+  }
+
+  function openUserSwitcher() {
+    document.getElementById('loginModal').classList.remove('hidden');
+  }
+
+  function loadAppState(searchTerm = '') {
+    google.script.run
+      .withSuccessHandler((response) => {
+        state.permissions = response.permissions || [];
+        state.records = response.records || [];
+        state.stats = response.stats || {};
+        state.currentUser = response.currentUser || state.currentUser;
+        renderCurrentUser();
+        renderStats();
+        renderTable();
+        renderActivity(response.recentActivity || []);
+        renderNotifications(response.notifications || []);
+        applyPermissionVisibility();
+      })
+      .withFailureHandler(showError)
+      .getAppState(state.currentUser, searchTerm);
+  }
+
+  function renderCurrentUser() {
+    document.getElementById('currentUserName').textContent = state.currentUser.fullName || '';
+    document.getElementById('currentUserMeta').textContent = `${state.currentUser.role || ''} · ${state.currentUser.email || ''}`;
+    document.getElementById('permissionChips').innerHTML = state.permissions.map((p) => `<span class="chip">${escapeHtml(p)}</span>`).join('');
+  }
+
+  function renderStats() {
+    const statsGrid = document.getElementById('statsGrid');
+    statsGrid.innerHTML = '';
+    (state.config.dashboardMetrics || []).forEach((metric) => {
+      const card = document.createElement('div');
+      card.className = 'stat-card';
+      const value = state.stats[metric.id] == null ? 0 : state.stats[metric.id];
+      card.innerHTML = `<div class="stat-label">${escapeHtml(metric.label)}</div><div class="stat-value">${escapeHtml(String(value))}</div>`;
+      statsGrid.appendChild(card);
+    });
+  }
+
+  function renderActivity(items) {
+    const wrap = document.getElementById('activityFeed');
+    wrap.innerHTML = items.length ? '' : `<div class="muted">No recent activity.</div>`;
+    items.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = 'timeline-item';
+      el.innerHTML = `
+        <div class="timeline-title">${escapeHtml(item.action || '')}</div>
+        <div>${escapeHtml(item.recordId || 'No record')}</div>
+        <div class="timeline-meta">${escapeHtml(item.fullName || item.email || '')} · ${escapeHtml(item.timestamp || '')}</div>
+      `;
+      wrap.appendChild(el);
+    });
+  }
+
+  function renderNotifications(items) {
+    const wrap = document.getElementById('notificationFeed');
+    wrap.innerHTML = items.length ? '' : `<div class="muted">No notifications sent yet.</div>`;
+    items.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = 'timeline-item';
+      el.innerHTML = `
+        <div class="timeline-title">${escapeHtml(item.subject || '')}</div>
+        <div>${escapeHtml(item.to || '')}</div>
+        <div class="timeline-meta">${escapeHtml(item.deliveryStatus || '')} · ${escapeHtml(item.sentAt || item.triggeredAt || '')}</div>
+      `;
+      wrap.appendChild(el);
+    });
+  }
+
+  function renderTableHead() {
+    const head = document.getElementById('tableHead');
+    head.innerHTML = '';
+    const tr = document.createElement('tr');
+    state.config.tableColumns.forEach((column) => {
+      const th = document.createElement('th');
+      th.textContent = column;
+      tr.appendChild(th);
+    });
+    const actionTh = document.createElement('th');
+    actionTh.textContent = 'Actions';
+    tr.appendChild(actionTh);
+    head.appendChild(tr);
+  }
+
+  function renderTable() {
+    const body = document.getElementById('tableBody');
+    body.innerHTML = '';
+    if (!state.records.length) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="${state.config.tableColumns.length + 1}" class="muted">No records found.</td>`;
+      body.appendChild(tr);
+    } else {
+      state.records.forEach((record) => {
+        const tr = document.createElement('tr');
+        state.config.tableColumns.forEach((column) => {
+          const td = document.createElement('td');
+          const value = record[column] == null ? '' : String(record[column]);
+          td.innerHTML = renderValueBadge(column, value);
+          tr.appendChild(td);
+        });
+        const tdActions = document.createElement('td');
+        tdActions.innerHTML = `
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm" type="button" onclick="openRecordWorkspace('${escapeAttr(record['Record ID'])}')">Open</button>
+            ${can('edit') ? `<button class="btn btn-ghost btn-sm" type="button" onclick="editRecord('${escapeAttr(record['Record ID'])}')">Edit</button>` : ''}
+            ${can('delete') ? `<button class="btn btn-danger btn-sm" type="button" onclick="removeRecord('${escapeAttr(record['Record ID'])}')">Delete</button>` : ''}
+          </div>
+        `;
+        tr.appendChild(tdActions);
+        body.appendChild(tr);
+      });
+    }
+    document.getElementById('recordCountLabel').textContent = `${state.records.length} record${state.records.length === 1 ? '' : 's'}`;
+  }
+
+  function renderValueBadge(column, value) {
+    if (['Status','Priority','Risk Level','Onboarding Status','Eligibility Status','Case Status','Session Status','Follow Up Required','WSQ Alignment','Output Type','Access Level'].includes(column)) {
+      let klass = 'badge';
+      const lowered = String(value || '').toLowerCase();
+      if (['urgent','critical','high','not eligible','cancelled'].includes(lowered)) klass += ' danger';
+      else if (['pending','requested','in review','in progress','ready for review'].includes(lowered)) klass += ' warn';
+      else if (['completed','assigned','eligible','active','yes'].includes(lowered)) klass += ' secondary';
+      return `<span class="${klass}">${escapeHtml(value || '-')}</span>`;
+    }
+    return escapeHtml(value || '-');
+  }
+
+  function buildForm() {
+    const grid = document.getElementById('formGrid');
+    grid.innerHTML = '';
+    state.config.formFields.forEach((field) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'form-field' + (field.input === 'textarea' ? ' full' : '');
+      wrap.innerHTML = `<label for="${toInputId(field.key)}">${escapeHtml(field.label)}${field.required ? ' *' : ''}</label>`;
+      let input;
+      if (field.input === 'select') {
+        input = document.createElement('select');
+        input.innerHTML = `<option value="">Select</option>` + (field.options || []).map((o) => `<option value="${escapeAttr(o)}">${escapeHtml(o)}</option>`).join('');
+      } else if (field.input === 'textarea') {
+        input = document.createElement('textarea');
+      } else {
+        input = document.createElement('input');
+        input.type = field.input || 'text';
+      }
+      input.id = toInputId(field.key);
+      input.name = field.key;
+      input.required = !!field.required;
+      wrap.appendChild(input);
+      grid.appendChild(wrap);
+    });
+  }
+
+  function populateAttachmentCategories() {
+    const select = document.getElementById('attachmentCategory');
+    select.innerHTML = (state.config.attachmentCategories || []).map((item) => `<option value="${escapeAttr(item)}">${escapeHtml(item)}</option>`).join('');
+  }
+
+  function can(permission) {
+    return state.permissions.indexOf(permission) > -1;
+  }
+
+  function applyPermissionVisibility() {
+    document.getElementById('addBtn').style.display = can('create') ? '' : 'none';
+  }
+
+  function performSearch() {
+    const term = document.getElementById('searchInput').value.trim();
+    loadAppState(term);
+  }
+
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    loadAppState('');
+  }
+
+  function openRecordModal(record) {
+    if (!can('create') && !can('edit')) return showToast('This role cannot create or edit records.');
+    document.getElementById('recordModalTitle').textContent = record ? 'Edit Record' : 'Add Record';
+    document.getElementById('recordIdField').value = record ? (record['Record ID'] || '') : '';
+    state.config.formFields.forEach((field) => {
+      const input = document.getElementById(toInputId(field.key));
+      input.value = record && record[field.key] != null ? record[field.key] : '';
+    });
+    document.getElementById('recordModal').classList.remove('hidden');
+  }
+
+  function closeRecordModal() {
+    document.getElementById('recordModal').classList.add('hidden');
+    document.getElementById('recordForm').reset();
+    document.getElementById('recordIdField').value = '';
+  }
+
+  function editRecord(recordId) {
+    const record = state.records.find((r) => r['Record ID'] === recordId);
+    if (!record) return showToast('Record not found.');
+    openRecordModal(record);
+  }
+
+  function submitRecord(event) {
+    event.preventDefault();
+    const payload = { 'Record ID': document.getElementById('recordIdField').value };
+    state.config.formFields.forEach((field) => {
+      payload[field.key] = document.getElementById(toInputId(field.key)).value;
+    });
+
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Saved.');
+        closeRecordModal();
+        loadAppState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .saveRecord(payload, state.currentUser);
+  }
+
+  function removeRecord(recordId) {
+    if (!can('delete')) return showToast('This role cannot delete records.');
+    if (!confirm('Delete this record?')) return;
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Deleted.');
+        loadAppState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .deleteRecord(recordId, state.currentUser);
+  }
+
+  function openRecordWorkspace(recordId) {
+    state.selectedRecordId = recordId;
+    google.script.run
+      .withSuccessHandler((bundle) => {
+        state.selectedBundle = bundle;
+        renderRecordWorkspace(bundle);
+        document.getElementById('detailModal').classList.remove('hidden');
+      })
+      .withFailureHandler(showError)
+      .getRecordBundle(recordId, state.currentUser);
+  }
+
+  function renderRecordWorkspace(bundle) {
+    const record = bundle.record || {};
+    document.getElementById('detailTitle').textContent = `${state.config.pageTitle} Workspace`;
+    document.getElementById('detailSubtitle').textContent = `${record['Record ID'] || ''}`;
+    const summaryGrid = document.getElementById('summaryGrid');
+    const fields = state.config.summaryFields && state.config.summaryFields.length ? state.config.summaryFields : state.config.tableColumns;
+    summaryGrid.innerHTML = fields.map((field) => `
+      <div class="summary-card">
+        <div class="summary-label">${escapeHtml(field)}</div>
+        <div class="summary-value">${escapeHtml(record[field] == null ? '' : String(record[field]))}</div>
+      </div>
+    `).join('');
+
+    const detailButtons = document.getElementById('detailButtons');
+    detailButtons.innerHTML = `
+      ${can('edit') ? `<button class="btn btn-secondary btn-sm" type="button" onclick="editRecord('${escapeAttr(record['Record ID'])}')">Edit Record</button>` : ''}
+      ${can('email') ? `<button class="btn btn-secondary btn-sm" type="button" onclick="openEmailModal()">Send Email</button>` : ''}
+      ${can('export') ? `<button class="btn btn-ghost btn-sm" type="button" onclick="openPrintableView()">Print / PDF</button>` : ''}
+    `;
+
+    const workflowButtons = document.getElementById('workflowButtons');
+    workflowButtons.innerHTML = bundle.quickActions && bundle.quickActions.length
+      ? bundle.quickActions.map((action) => `<button class="btn btn-primary btn-sm" type="button" onclick="runWorkflowAction('${escapeAttr(action.key)}')">${escapeHtml(action.label)}</button>`).join('')
+      : `<div class="muted">No workflow actions available for this record and role.</div>`;
+
+    const attachmentList = document.getElementById('attachmentList');
+    attachmentList.innerHTML = bundle.attachments && bundle.attachments.length
+      ? bundle.attachments.map((item) => `
+          <div class="mini-item">
+            <div><strong>${escapeHtml(item.fileName)}</strong></div>
+            <div class="muted">${escapeHtml(item.category)} · ${escapeHtml(formatBytes(item.fileSize || 0))}</div>
+            <div class="timeline-meta">${escapeHtml(item.uploadedBy || '')} · ${escapeHtml(item.uploadedAt || '')}</div>
+            <div style="margin-top:8px;"><a href="${escapeAttr(item.driveUrl)}" target="_blank">Open file</a></div>
+          </div>
+        `).join('')
+      : `<div class="muted">No attachments uploaded yet.</div>`;
+
+    const timeline = document.getElementById('recordTimeline');
+    timeline.innerHTML = bundle.timeline && bundle.timeline.length
+      ? bundle.timeline.map((item) => `
+          <div class="timeline-item">
+            <div class="timeline-title">${escapeHtml(item.action)}</div>
+            <div class="timeline-meta">${escapeHtml(item.fullName || item.email || '')} · ${escapeHtml(item.role || '')} · ${escapeHtml(item.timestamp || '')}</div>
+          </div>
+        `).join('')
+      : `<div class="muted">No timeline entries yet.</div>`;
+  }
+
+  function closeDetailModal() {
+    document.getElementById('detailModal').classList.add('hidden');
+    state.selectedRecordId = '';
+    state.selectedBundle = null;
+  }
+
+  function runWorkflowAction(actionKey) {
+    if (!can('workflow')) return showToast('This role cannot run workflow actions.');
+    const note = document.getElementById('workflowNote').value.trim();
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Workflow updated.');
+        openRecordWorkspace(state.selectedRecordId);
+        loadAppState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .transitionRecord(state.selectedRecordId, actionKey, note, state.currentUser);
+  }
+
+  function openAttachmentModal() {
+    if (!can('upload')) return showToast('This role cannot upload attachments.');
+    if (!state.selectedRecordId) return showToast('Open a record first.');
+    document.getElementById('attachmentModal').classList.remove('hidden');
+  }
+
+  function closeAttachmentModal() {
+    document.getElementById('attachmentModal').classList.add('hidden');
+    document.getElementById('attachmentForm').reset();
+  }
+
+  function submitAttachment(event) {
+    event.preventDefault();
+    const fileInput = document.getElementById('attachmentFile');
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return showToast('Please choose a file.');
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      const base64Data = String(reader.result).split(',')[1];
+      google.script.run
+        .withSuccessHandler((response) => {
+          showToast(response.message || 'Attachment uploaded.');
+          closeAttachmentModal();
+          openRecordWorkspace(state.selectedRecordId);
+          loadAppState(document.getElementById('searchInput').value.trim());
+        })
+        .withFailureHandler(showError)
+        .uploadAttachment({
+          recordId: state.selectedRecordId,
+          fileName: file.name,
+          mimeType: file.type,
+          base64Data: base64Data,
+          category: document.getElementById('attachmentCategory').value,
+          description: document.getElementById('attachmentDescription').value
+        }, state.currentUser);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function openEmailModal() {
+    if (!can('email')) return showToast('This role cannot send notifications.');
+    const record = state.selectedBundle && state.selectedBundle.record ? state.selectedBundle.record : null;
+    if (!record) return showToast('Open a record first.');
+    const template = (state.config.notificationTemplates || [])[0] || { subject: `${state.selectedRecordId} update` };
+    document.getElementById('emailTo').value = guessEmailRecipient(record);
+    document.getElementById('emailCc').value = '';
+    document.getElementById('emailSubject').value = (template.subject || `${state.selectedRecordId} update`).replace('{{recordId}}', state.selectedRecordId);
+    document.getElementById('emailMessage').value = `Hello,\n\nThis is a demo notification from ${state.config.pageTitle}.\n\nPlease review the latest update for record ${state.selectedRecordId}.`;
+    document.getElementById('emailModal').classList.remove('hidden');
+  }
+
+  function closeEmailModal() {
+    document.getElementById('emailModal').classList.add('hidden');
+    document.getElementById('emailForm').reset();
+  }
+
+  function submitEmail(event) {
+    event.preventDefault();
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Email sent.');
+        closeEmailModal();
+        loadAppState(document.getElementById('searchInput').value.trim());
+      })
+      .withFailureHandler(showError)
+      .sendRecordEmail({
+        recordId: state.selectedRecordId,
+        to: document.getElementById('emailTo').value.trim(),
+        cc: document.getElementById('emailCc').value.trim(),
+        subject: document.getElementById('emailSubject').value.trim(),
+        message: document.getElementById('emailMessage').value.trim()
+      }, state.currentUser);
+  }
+
+  function guessEmailRecipient(record) {
+    const fields = ['Email','Contact','Requestor'];
+    for (const field of fields) {
+      const value = record && record[field] ? String(record[field]) : '';
+      if (value.indexOf('@') > -1) return value;
+    }
+    return 'demo-recipient@example.com';
+  }
+
+  function openPrintableView() {
+    if (!can('export')) return showToast('This role cannot export.');
+    google.script.run
+      .withSuccessHandler((url) => {
+        if (!url) return showToast('Deploy as web app first to enable print view.');
+        window.open(url, '_blank');
+      })
+      .withFailureHandler(showError)
+      .getPrintableUrl(state.selectedRecordId);
+  }
+
+  function resetDemoData() {
+    if (!can('reset')) return showToast('Only Admin can reset demo data.');
+    if (!confirm('Reset the demo data for this portal?')) return;
+    google.script.run
+      .withSuccessHandler((response) => {
+        showToast(response.message || 'Demo reset done.');
+        closeDetailModal();
+        loadAppState('');
+      })
+      .withFailureHandler(showError)
+      .resetDemoData(state.currentUser);
+  }
+
+  function showError(error) {
+    showToast(error && error.message ? error.message : 'Something went wrong.');
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.add('hidden'), 2600);
+  }
+
+  function toInputId(key) {
+    return 'fld_' + key.replace(/[^a-zA-Z0-9]+/g, '_').toLowerCase();
+  }
+
+  function escapeHtml(text) {
+    return String(text == null ? '' : text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeAttr(text) {
+    return escapeHtml(text);
+  }
+
+  function formatBytes(bytes) {
+    const n = Number(bytes || 0);
+    if (!n) return '0 B';
+    if (n < 1024) return `${n} B`;
+    if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+    return `${(n / 1024 / 1024).toFixed(2)} MB`;
+  }
+</script>

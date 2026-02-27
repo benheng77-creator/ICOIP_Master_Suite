@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <title><?= JSON.parse(bootstrapJson).projectName ?></title>
+    <script>
+      window.ICOIP_BOOTSTRAP = <?!= bootstrapJson ?>;
+      window.ICOIP_INITIAL_MODULE = <?= JSON.stringify(initialModule) ?>;
+    </script>
+    <?!= include('Styles'); ?>
+  </head>
+  <body>
+    <div id="loginModal" class="modal">
+      <div class="modal-panel login-panel">
+        <div class="login-header">
+          <div>
+            <div class="eyebrow">Client-facing near-full demo</div>
+            <h1><?= JSON.parse(bootstrapJson).pageTitle ?></h1>
+            <p class="hero-subtitle"><?= JSON.parse(bootstrapJson).programmeDescription ?></p>
+          </div>
+        </div>
+        <div class="demo-user-grid" id="demoUserGrid"></div>
+      </div>
+    </div>
+
+    <div class="page-shell hidden" id="appShell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow"><?= JSON.parse(bootstrapJson).programmeName ?></p>
+          <h1><?= JSON.parse(bootstrapJson).pageTitle ?></h1>
+          <p class="hero-subtitle"><?= JSON.parse(bootstrapJson).pageSubtitle ?></p>
+          <p class="programme-description"><?= JSON.parse(bootstrapJson).programmeDescription ?></p>
+        </div>
+        <div class="hero-side">
+          <div class="profile-card">
+            <div class="profile-top">
+              <div>
+                <div class="muted tiny">Signed in as</div>
+                <div class="profile-name" id="currentUserName"></div>
+                <div class="profile-meta" id="currentUserMeta"></div>
+              </div>
+              <button class="btn btn-ghost" type="button" onclick="openUserSwitcher()">Switch User</button>
+            </div>
+            <div class="permission-wrap">
+              <div class="muted tiny">Current capabilities</div>
+              <div id="permissionChips" class="chip-wrap"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="surface module-surface">
+        <div class="section-head module-head">
+          <div>
+            <h2>Our Portal</h2>
+            <p class="muted">Switch between the 5 ICOIP modules within one master suite.</p>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-ghost" id="resetModuleBtn" type="button" onclick="resetModuleData()">Reset Current Module</button>
+            <button class="btn btn-ghost" id="resetAllBtn" type="button" onclick="resetAllData()">Reset All Demo</button>
+          </div>
+        </div>
+        <div id="moduleGrid" class="module-grid"></div>
+      </section>
+
+      <section class="module-banner surface tone">
+        <div>
+          <div class="eyebrow" id="moduleEyebrow">Current Module</div>
+          <h2 id="moduleTitle"></h2>
+          <p class="muted" id="moduleSubtitle"></p>
+        </div>
+        <div class="module-meta-card" id="moduleMetaCard"></div>
+      </section>
+
+      <section class="stats-grid" id="statsGrid"></section>
+
+      <section class="two-col">
+        <div class="surface">
+          <div class="section-head">
+            <div>
+              <h2>Records</h2>
+              <p class="muted">Search, edit, workflow actions, attachments, notifications, and print-ready summaries.</p>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-primary" type="button" id="addBtn" onclick="openRecordModal()">Add Record</button>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <input type="text" id="searchInput" placeholder="Search current module">
+              <button class="btn btn-secondary" type="button" onclick="performSearch()">Search</button>
+              <button class="btn btn-ghost" type="button" onclick="clearSearch()">Clear</button>
+            </div>
+            <div class="toolbar-right">
+              <span class="muted" id="recordCountLabel">0 records</span>
+            </div>
+          </div>
+
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <div class="surface">
+            <div class="section-head">
+              <div>
+                <h2>Activity</h2>
+                <p class="muted">Recent actions in the current module.</p>
+              </div>
+            </div>
+            <div id="activityFeed" class="timeline"></div>
+          </div>
+
+          <div class="surface">
+            <div class="section-head">
+              <div>
+                <h2>Notifications</h2>
+                <p class="muted">Email notifications sent from the current module.</p>
+              </div>
+            </div>
+            <div id="notificationFeed" class="timeline"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal hidden" id="recordModal">
+      <div class="modal-panel">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Record Form</div>
+            <h2 id="recordModalTitle">Add Record</h2>
+          </div>
+          <button class="icon-btn" type="button" onclick="closeRecordModal()">×</button>
+        </div>
+        <form id="recordForm" onsubmit="submitRecord(event)">
+          <input type="hidden" id="recordIdField">
+          <div class="form-grid" id="formGrid"></div>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" type="button" onclick="closeRecordModal()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Save Record</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="detailModal">
+      <div class="modal-panel detail-panel">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Record Workspace</div>
+            <h2 id="detailTitle">Record Details</h2>
+            <p class="muted" id="detailSubtitle"></p>
+          </div>
+          <button class="icon-btn" type="button" onclick="closeDetailModal()">×</button>
+        </div>
+
+        <div class="detail-grid">
+          <div class="surface tone">
+            <h3>Summary</h3>
+            <div id="summaryGrid" class="summary-grid"></div>
+            <div class="action-grid" id="detailButtons"></div>
+          </div>
+
+          <div class="surface tone">
+            <h3>Workflow</h3>
+            <div id="workflowButtons" class="action-grid"></div>
+            <textarea id="workflowNote" placeholder="Optional workflow note"></textarea>
+          </div>
+
+          <div class="surface tone">
+            <div class="section-head compact">
+              <h3>Attachments</h3>
+              <button class="btn btn-secondary" type="button" onclick="openAttachmentModal()">Upload</button>
+            </div>
+            <div id="attachmentList" class="mini-list"></div>
+          </div>
+
+          <div class="surface tone">
+            <div class="section-head compact">
+              <h3>Timeline</h3>
+            </div>
+            <div id="recordTimeline" class="timeline"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="attachmentModal">
+      <div class="modal-panel slim-panel">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Attachment Upload</div>
+            <h2>Upload Attachment</h2>
+          </div>
+          <button class="icon-btn" type="button" onclick="closeAttachmentModal()">×</button>
+        </div>
+        <form id="attachmentForm" onsubmit="submitAttachment(event)">
+          <div class="form-grid">
+            <div class="form-field">
+              <label>Category</label>
+              <select id="attachmentCategory"></select>
+            </div>
+            <div class="form-field">
+              <label>Description</label>
+              <input type="text" id="attachmentDescription" placeholder="Short note">
+            </div>
+            <div class="form-field full">
+              <label>Choose File (max 4MB)</label>
+              <input type="file" id="attachmentFile" required>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" type="button" onclick="closeAttachmentModal()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Upload Attachment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="emailModal">
+      <div class="modal-panel slim-panel">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Notification</div>
+            <h2>Send Email Update</h2>
+          </div>
+          <button class="icon-btn" type="button" onclick="closeEmailModal()">×</button>
+        </div>
+        <form id="emailForm" onsubmit="submitEmail(event)">
+          <div class="form-grid">
+            <div class="form-field full">
+              <label>To</label>
+              <input type="text" id="emailTo" required placeholder="recipient@example.com">
+            </div>
+            <div class="form-field full">
+              <label>Cc</label>
+              <input type="text" id="emailCc" placeholder="Optional">
+            </div>
+            <div class="form-field full">
+              <label>Subject</label>
+              <input type="text" id="emailSubject" required>
+            </div>
+            <div class="form-field full">
+              <label>Message</label>
+              <textarea id="emailMessage" required></textarea>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" type="button" onclick="closeEmailModal()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Send Email</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast hidden" id="toast"></div>
+
+    <?!= include('Scripts'); ?>
+  </body>
+</html>
