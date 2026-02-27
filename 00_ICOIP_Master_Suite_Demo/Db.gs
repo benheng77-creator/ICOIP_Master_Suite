@@ -18,7 +18,7 @@ function getSpreadsheet_() {
       props.setProperty('DATA_SPREADSHEET_ID', active.getId());
       return active;
     }
-  } catch (e) { /* not in UI context – fall through to create */ }
+  } catch (e) { Logger.log('getActiveSpreadsheet unavailable: ' + e.message); }
 
   var created = SpreadsheetApp.create('ICOIP_Data_' + new Date().getTime());
   props.setProperty('SPREADSHEET_ID', created.getId());
