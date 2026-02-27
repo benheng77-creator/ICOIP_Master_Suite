@@ -53,5 +53,5 @@ for portal in "${PORTALS[@]}"; do
   echo ""
 done
 
-echo "———————————————————————————"
+echo "-----------------------------"
 echo "Done.  Pushed: $pushed | Skipped: $skipped | Failed: $failed"
