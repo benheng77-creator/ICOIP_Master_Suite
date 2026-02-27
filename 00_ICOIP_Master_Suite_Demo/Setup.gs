@@ -35,7 +35,7 @@ function setupProject_(resetData) {
   if (resetData) clearSheetBody_(noti, ICOIP_MASTER_CONFIG.NOTIFICATION_COLUMNS.length);
   autoSizeSheet_(noti, ICOIP_MASTER_CONFIG.NOTIFICATION_COLUMNS.length);
 
-  ss.toast(ICOIP_MASTER_CONFIG.PROJECT_NAME + ' setup complete', 'ICOIP', 5);
+  try { ss.toast(ICOIP_MASTER_CONFIG.PROJECT_NAME + ' setup complete', 'ICOIP', 5); } catch (e) { Logger.log(ICOIP_MASTER_CONFIG.PROJECT_NAME + ' setup complete'); }
 }
 
 function resetSingleModule_(cfg, resetData) {
