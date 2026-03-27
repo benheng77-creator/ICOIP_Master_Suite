@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npx playwright:*)",
       "Bash(npm init:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(git -C c:/Users/jvben/Desktop/PROJECTS/icoip-projects status --short)",
+      "Bash(git -C c:/Users/jvben/Desktop/PROJECTS/icoip-projects status)"
     ]
   },
   "hooks": {
