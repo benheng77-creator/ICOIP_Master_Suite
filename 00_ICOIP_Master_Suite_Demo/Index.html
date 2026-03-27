@@ -7,7 +7,7 @@
     <title><?= JSON.parse(bootstrapJson).projectName ?></title>
     <script>
       window.ICOIP_BOOTSTRAP = <?!= bootstrapJson ?>;
-      window.ICOIP_INITIAL_MODULE = <?= JSON.stringify(initialModule) ?>;
+      window.ICOIP_INITIAL_MODULE = <?!= JSON.stringify(initialModule) ?>;
     </script>
     <?!= include('Styles'); ?>
   </head>
