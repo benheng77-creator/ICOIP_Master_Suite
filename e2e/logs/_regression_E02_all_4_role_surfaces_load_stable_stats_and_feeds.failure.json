@@ -1,0 +1,89 @@
+{
+  "title": "@regression E02 all 4 role surfaces load stable stats and feeds",
+  "status": "failed",
+  "url": "https://script.google.com/macros/s/AKfycbyBtrFEkLnnlGPYRNb_GyB4puln6m_Gl7aldzscrH3OPrSbhmD6CFlBmlMTO73bEx93/exec",
+  "console": [
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'ambient-light-sensor'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'speaker'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vibrate'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vr'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'web-share'."
+    },
+    {
+      "type": "warning",
+      "text": "An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'ambient-light-sensor'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'speaker'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vibrate'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vr'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'web-share'."
+    },
+    {
+      "type": "warning",
+      "text": "An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'ambient-light-sensor'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'speaker'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vibrate'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vr'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'web-share'."
+    },
+    {
+      "type": "warning",
+      "text": "An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing."
+    },
+    {
+      "type": "info",
+      "text": "Net state changed from IDLE to BUSY"
+    },
+    {
+      "type": "info",
+      "text": "Net state changed from BUSY to IDLE"
+    }
+  ],
+  "pageErrors": [],
+  "network": []
+}

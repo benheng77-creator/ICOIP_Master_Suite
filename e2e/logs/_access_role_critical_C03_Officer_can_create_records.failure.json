@@ -1,0 +1,33 @@
+{
+  "title": "@access @role @critical C03 Officer can create records",
+  "status": "failed",
+  "url": "https://script.google.com/macros/s/AKfycbyBtrFEkLnnlGPYRNb_GyB4puln6m_Gl7aldzscrH3OPrSbhmD6CFlBmlMTO73bEx93/exec",
+  "console": [
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'ambient-light-sensor'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'speaker'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vibrate'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'vr'."
+    },
+    {
+      "type": "warning",
+      "text": "Unrecognized feature: 'web-share'."
+    },
+    {
+      "type": "warning",
+      "text": "An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing."
+    }
+  ],
+  "pageErrors": [],
+  "network": []
+}
