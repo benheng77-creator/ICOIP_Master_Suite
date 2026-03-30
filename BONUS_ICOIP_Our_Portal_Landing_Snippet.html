@@ -566,6 +566,52 @@
     .section-head p      { font-size: 15.5px; color: var(--text-sec); margin-top: 14px; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.7; }
 
     .divider-line { height: 1px; background: var(--border); border: none; margin: 0; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       DEMO CREDENTIALS CARD
+    ════════════════════════════════════════════════════════════════════ */
+    .creds-card {
+      background: var(--bg);
+      border: 1.5px solid #BFDBFE;
+      border-radius: 20px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 12px rgba(37,99,235,.07);
+    }
+    .creds-top {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
+    }
+    .creds-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (min-width: 640px) { .creds-grid { grid-template-columns: repeat(4, 1fr); } }
+    .cred-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .cred-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 5px;
+    }
+    .cred-value {
+      font-size: 13px; font-weight: 700;
+      color: var(--text); font-family: 'Inter', monospace;
+      word-break: break-all;
+    }
+    .cred-value.mono {
+      font-size: 13px; letter-spacing: 0.02em;
+      color: var(--accent);
+    }
+    .creds-note {
+      font-size: 12px; color: var(--text-muted);
+      margin-top: 14px; line-height: 1.6;
+    }
   </style>
 </head>
 
@@ -860,14 +906,16 @@
           </div>
         </div>
 
-        <!-- Live record (no internal references) -->
+        <!-- Live record -->
         <div class="live-record">
-          <span class="badge badge-live" style="flex-shrink:0;"><span class="ping" aria-hidden="true"></span>Live record</span>
-          <span style="font-weight:600; color:var(--text);">COU-2026-001</span>
+          <span class="badge badge-live" style="flex-shrink:0;"><span class="ping" aria-hidden="true"></span>Sample record</span>
+          <span style="font-weight:600; color:var(--text);">COU-2026-003</span>
           <span style="color:var(--text-muted);">·</span>
-          <span>Client: Janet Goh</span>
+          <span>Client: Sarah Lim</span>
           <span style="color:var(--text-muted);">·</span>
           <span>Counsellor: Rachel Ong</span>
+          <span style="color:var(--text-muted);">·</span>
+          <span>Session: Follow-up #2</span>
           <span style="color:var(--text-muted);">·</span>
           <span>Risk: <strong style="color:#D97706;">Medium</strong></span>
           <span style="color:var(--text-muted);">·</span>
@@ -963,7 +1011,7 @@
         </p>
         <div class="cta-ctas">
           <a
-            href="mailto:demo@icoip.app?subject=ICOIP%20Demo%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20live%20demonstration%20of%20ICOIP."
+            href="mailto:admin.demo@icoip.app?subject=ICOIP%20Demo%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20live%20demonstration%20of%20ICOIP."
             class="btn btn-primary"
             style="font-size:16px; padding:15px 32px;"
           >
@@ -997,7 +1045,36 @@
     <div class="section-head">
       <p class="overline">All Modules Live</p>
       <h2 id="demo-h2">Access any module directly.</h2>
-      <p>Each portal is independently accessible. Explore the platform at your own pace — full demo data included.</p>
+      <p>Each portal is independently accessible. Explore the platform at your own pace — full demo data pre-loaded.</p>
+    </div>
+
+    <!-- Demo credentials -->
+    <div class="creds-card" aria-label="Demo access credentials">
+      <div class="creds-top">
+        <span class="badge badge-live"><span class="ping" aria-hidden="true"></span>Demo Mode Active</span>
+        <span style="font-size:12px; color:var(--text-muted);">Use the credentials below to log in to any portal</span>
+      </div>
+      <div class="creds-grid">
+        <div class="cred-item">
+          <div class="cred-label">Demo Email</div>
+          <div class="cred-value mono">admin.demo@icoip.app</div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-label">Password</div>
+          <div class="cred-value mono">ICOIP@Demo2026</div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-label">Access Level</div>
+          <div class="cred-value">Administrator — Full Access</div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-label">Modules Available</div>
+          <div class="cred-value">All 5 — VOL · INT · COU · ADM · TRN</div>
+        </div>
+      </div>
+      <p class="creds-note">
+        All portals below are open in full admin demo mode. Sample data is pre-loaded across all five modules and can be reset at any time from the Admin panel.
+      </p>
     </div>
 
     <div class="portals-grid">
