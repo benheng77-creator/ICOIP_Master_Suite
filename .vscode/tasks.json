@@ -1,0 +1,19 @@
+﻿{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "god: normalize this project",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\Users\jvben\\Desktop\\GOD_SYSTEM\\Normalize-Project.ps1",
+        "-ProjectPath",
+        ""
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

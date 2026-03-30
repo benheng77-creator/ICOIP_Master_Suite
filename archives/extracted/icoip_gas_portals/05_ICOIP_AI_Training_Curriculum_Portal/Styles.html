@@ -1,0 +1,71 @@
+<style>
+  :root{
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --line:#d9e2ee;
+    --text:#1f2a37;
+    --muted:#637083;
+    --primary:#2952cc;
+    --primary-soft:#e8efff;
+    --shadow:0 10px 30px rgba(24,39,75,.08);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+  body{min-height:100vh}
+  .page-shell{max-width:1240px;margin:0 auto;padding:24px}
+  .hero,.table-card,.toolbar,.modal-panel,.stat-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .hero{padding:28px;display:grid;grid-template-columns:1.6fr .8fr;gap:20px;align-items:start}
+  .eyebrow{margin:0 0 8px 0;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:var(--primary);font-weight:700}
+  h1{margin:0 0 10px 0;font-size:34px;line-height:1.1}
+  .hero-subtitle,.programme-description{margin:0;color:var(--muted);line-height:1.6}
+  .programme-description{margin-top:14px}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+  .btn{appearance:none;border:0;border-radius:12px;padding:13px 18px;font-weight:700;cursor:pointer;font-size:14px;min-height:46px}
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-secondary{background:#eff4fb;color:var(--text)}
+  .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--text)}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px}
+  .stat-card{padding:20px}
+  .stat-label{font-size:13px;color:var(--muted);margin-bottom:10px}
+  .stat-value{font-size:32px;font-weight:800}
+  .toolbar{margin-top:20px;padding:16px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+  .toolbar-left{display:flex;gap:10px;flex-wrap:wrap}
+  input,select,textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;color:var(--text)}
+  textarea{min-height:120px;resize:vertical}
+  .toolbar input{width:280px;max-width:100%}
+  .muted{color:var(--muted)}
+  .table-card{margin-top:20px;padding:6px}
+  .table-wrap{overflow:auto}
+  table{width:100%;border-collapse:collapse;min-width:980px}
+  th,td{padding:14px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px}
+  th{background:#f8fafc;position:sticky;top:0;z-index:1}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .tag{display:inline-flex;padding:6px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-size:12px;font-weight:700}
+  .modal{position:fixed;inset:0;background:rgba(17,24,39,.45);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}
+  .hidden{display:none!important}
+  .modal-panel{width:min(940px,100%);padding:24px;max-height:95vh;overflow:auto}
+  .modal-header{display:flex;justify-content:space-between;gap:16px;align-items:start;margin-bottom:18px}
+  .icon-btn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:12px;width:44px;height:44px;font-size:24px;cursor:pointer}
+  .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .form-field label{display:block;font-size:13px;font-weight:700;margin-bottom:8px}
+  .form-field.full{grid-column:1/-1}
+  .required{color:#b42318}
+  .modal-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+  .toast{position:fixed;right:20px;bottom:20px;background:#111827;color:#fff;padding:14px 16px;border-radius:12px;box-shadow:var(--shadow);z-index:70;max-width:320px}
+  @media (max-width: 960px){
+    .hero{grid-template-columns:1fr}
+    .hero-actions{justify-content:flex-start}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .form-grid{grid-template-columns:1fr}
+  }
+  @media (max-width: 640px){
+    .page-shell{padding:14px}
+    h1{font-size:28px}
+    .stats-grid{grid-template-columns:1fr}
+    .toolbar{align-items:stretch;flex-direction:column}
+    .toolbar-left{flex-direction:column}
+    .toolbar input{width:100%}
+    .btn{width:100%}
+  }
+</style>

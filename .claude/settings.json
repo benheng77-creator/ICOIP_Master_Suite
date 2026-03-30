@@ -30,10 +30,25 @@
       "Bash(mkdir -p \"c:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-landing\")",
       "Bash(npm create:*)",
       "Bash(npx tailwindcss:*)",
-      "Bash(npx wrangler:*)"
+      "Bash(npx wrangler:*)",
+      "Bash(gh repo:*)",
+      "Bash(mv \"c:/Users/jvben/Desktop/PROJECTS/icoip-projects\" \"c:/Users/jvben/Desktop/PROJECTS/icoip-projects [COMPLETED-TESTED]\")",
+      "Bash(mv \"c:/Users/jvben/Desktop/PROJECTS/icoip-landing\" \"c:/Users/jvben/Desktop/PROJECTS/icoip-landing [COMPLETED-DEPLOYED]\")",
+      "Bash(powershell -Command \"Rename-Item -Path ''C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-landing'' -NewName ''icoip-landing [COMPLETED-DEPLOYED]''\")",
+      "Bash(powershell -Command \"Rename-Item -Path ''C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-projects'' -NewName ''icoip-projects [COMPLETED-TESTED]''\")",
+      "Bash(cmd /c move \"C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-projects\" \"C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-projects [COMPLETED-TESTED]\")",
+      "Bash(powershell -Command \":*)",
+      "Bash(python3 -c \"import os; os.rename\\(r''C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-projects'', r''C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-projects [COMPLETED-TESTED]''\\)\")",
+      "Bash(powershell -Command \"[System.IO.Directory]::Move\\(''C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-projects'', ''C:\\\\Users\\\\jvben\\\\Desktop\\\\PROJECTS\\\\icoip-projects [COMPLETED-TESTED]''\\)\")",
+      "WebFetch(domain:icoip-landing.pages.dev)",
+      "Bash(curl -s https://icoip-landing.pages.dev/)",
+      "Bash(\"/tmp/icoip-landing.html\")",
+      "Read(//tmp/**)"
     ],
     "additionalDirectories": [
-      "c:\\Users\\jvben\\Desktop\\PROJECTS\\icoip-landing"
+      "c:\\Users\\jvben\\Desktop\\PROJECTS\\icoip-landing",
+      "C:\\Users\\jvben\\Desktop",
+      "c:\\Users\\jvben\\Desktop\\PROJECTS\\icoip-projects [COMPLETED-TESTED]"
     ]
   },
   "hooks": {

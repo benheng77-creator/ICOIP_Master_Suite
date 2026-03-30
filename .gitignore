@@ -1,11 +1,8 @@
-.DS_Store
-*.log
-node_modules/
-.clasp.json
+﻿node_modules/
 dist/
 build/
-tmp/
-temp/
-playwright-report/
-archives/
-BONUS_ICOIP_Our_Portal_Landing_Snippet.html
+.next/
+coverage/
+.env
+.env.local
+*.log
