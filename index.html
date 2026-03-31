@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ICOIP — Integrated Care & Operations Intelligence Programme. One unified platform for social service organisations: Volunteer Management, Intake & Referral, Counselling, Admin Governance, and Training & Curriculum." />
-  <meta property="og:title" content="ICOIP — One Platform. Five Modules. Zero Silos." />
-  <meta property="og:description" content="A unified operations platform purpose-built for social service organisations. Role-based access, audit-ready workflows, and cross-team coordination — all in one secure environment." />
+  <meta name="description" content="ICOIP — Integrated Care & Operations Intelligence Programme. A unified operations platform for social service organisations: Volunteer Management, Intake & Referral, Counselling, Admin Governance, and Training & Curriculum." />
+  <meta property="og:title" content="ICOIP — Unified Operations Platform for Social Service Organisations" />
+  <meta property="og:description" content="Five integrated modules. One secure platform. Role-based access, audit-ready workflows, and full cross-team coordination — purpose-built for social service organisations." />
   <meta property="og:type" content="website" />
-  <title>ICOIP — Integrated Care & Operations Intelligence Programme</title>
+  <title>ICOIP — Integrated Care &amp; Operations Intelligence Programme</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563EB'/><text y='22' x='5' font-size='17' font-family='sans-serif' font-weight='bold' fill='white'>IC</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232563EB'/><text y='22' x='5' font-size='17' font-family='sans-serif' font-weight='bold' fill='white'>IC</text></svg>" />
 
   <style>
-    /* ── Design tokens ─────────────────────────────────────────────────── */
+    /* ── Design tokens ──────────────────────────────────────────────────── */
     :root {
       --bg:           #FFFFFF;
-      --bg-alt:       #F7FBFF;
+      --bg-alt:       #F8FAFC;
       --bg-card:      #FFFFFF;
       --text:         #0F172A;
-      --text-sec:     #475569;
+      --text-sec:     #64748B;
       --text-muted:   #94A3B8;
       --accent:       #2563EB;
       --accent-hover: #1D4ED8;
@@ -31,19 +31,18 @@
       --border:       #E2E8F0;
       --border-mid:   #CBD5E1;
       --shadow-xs:    0 1px 2px rgba(15,23,42,.04);
-      --shadow-sm:    0 1px 4px rgba(15,23,42,.06), 0 2px 8px rgba(15,23,42,.04);
-      --shadow-md:    0 4px 16px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.04);
-      --shadow-lg:    0 8px 32px rgba(15,23,42,.10), 0 4px 12px rgba(15,23,42,.06);
-      --r-card:       20px;
-      --r-btn:        14px;
-      --r-badge:      8px;
+      --shadow-sm:    0 1px 3px rgba(15,23,42,.06), 0 2px 8px rgba(15,23,42,.04);
+      --shadow-md:    0 4px 14px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.04);
+      --r-card:       14px;
+      --r-btn:        8px;
+      --r-badge:      6px;
     }
 
-    /* ── Reset ─────────────────────────────────────────────────────────── */
+    /* ── Reset ──────────────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -52,654 +51,539 @@
       -moz-osx-font-smoothing: grayscale;
     }
     img, svg { display: block; max-width: 100%; }
-    a { color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
 
-    /* ── Layout helpers ─────────────────────────────────────────────────── */
-    .container  { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    /* ── Layout ─────────────────────────────────────────────────────────── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
     .section    { max-width: 1160px; margin: 0 auto; padding: 80px 24px; }
-    .section-bg { background: var(--bg-alt); }
+    .stripe     { background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 
-    /* ── Typography ─────────────────────────────────────────────────────── */
-    h1, h2, h3 {
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.15;
-      color: var(--text);
-    }
+    /* ── Typography ──────────────────────────────────────────────────────── */
+    h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; color: var(--text); }
     .overline {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      display: inline-block;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.09em; text-transform: uppercase;
       color: var(--accent);
     }
-    .lead {
-      font-size: 18px;
-      color: var(--text-sec);
-      line-height: 1.7;
+    .lead { font-size: 17px; color: var(--text-sec); line-height: 1.7; }
+
+    .section-head { margin-bottom: 48px; }
+    .section-head.centered { text-align: center; }
+    .section-head h2 {
+      font-size: clamp(26px, 3.5vw, 40px);
+      font-weight: 700; letter-spacing: -0.02em;
+      margin-top: 10px;
     }
+    .section-head p {
+      font-size: 15.5px; color: var(--text-sec);
+      margin-top: 14px; line-height: 1.7; max-width: 560px;
+    }
+    .section-head.centered p { margin-left: auto; margin-right: auto; }
 
     /* ── Buttons ────────────────────────────────────────────────────────── */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-family: inherit;
-      font-weight: 600;
-      font-size: 15px;
-      line-height: 1;
-      text-decoration: none;
-      border-radius: var(--r-btn);
-      border: none;
-      cursor: pointer;
-      padding: 13px 26px;
-      transition: background 0.15s, box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 7px; font-family: inherit; font-weight: 600;
+      font-size: 14px; line-height: 1;
+      border-radius: var(--r-btn); border: 1.5px solid transparent;
+      cursor: pointer; padding: 11px 20px;
+      transition: background 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s;
       white-space: nowrap;
     }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 1px 3px rgba(37,99,235,.3), 0 4px 12px rgba(37,99,235,.2);
-    }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .btn-primary:hover {
-      background: var(--accent-hover);
-      box-shadow: 0 2px 6px rgba(37,99,235,.4), 0 8px 24px rgba(37,99,235,.25);
-      transform: translateY(-1px);
+      background: var(--accent-hover); border-color: var(--accent-hover);
+      box-shadow: 0 2px 8px rgba(37,99,235,.3);
     }
-    .btn-secondary {
-      background: var(--bg);
-      color: var(--text);
-      border: 1.5px solid var(--border);
-      box-shadow: var(--shadow-xs);
-    }
+    .btn-secondary { background: var(--bg); color: var(--text); border-color: var(--border-mid); }
     .btn-secondary:hover {
-      border-color: var(--border-mid);
-      background: var(--bg-alt);
-      box-shadow: var(--shadow-sm);
+      border-color: var(--accent); color: var(--accent); background: var(--accent-light);
     }
-    .btn-sm { font-size: 13px; padding: 9px 18px; border-radius: 12px; }
+    .btn-sm { font-size: 13px; padding: 8px 15px; }
+    .btn-lg { font-size: 15px; padding: 13px 26px; }
 
     /* ── Badges ─────────────────────────────────────────────────────────── */
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 11px;
-      border-radius: var(--r-badge);
-      border: 1px solid;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11.5px; font-weight: 600;
+      padding: 4px 9px; border-radius: var(--r-badge); border: 1px solid;
     }
     .badge-blue    { background: var(--accent-tint); color: var(--accent); border-color: #BFDBFE; }
-    .badge-neutral { background: #F8FAFC; color: var(--text-sec); border-color: var(--border); }
-    .badge-live    { background: #DCFCE7; color: #16A34A; border-color: #BBF7D0; }
-
-    /* ── Cards ──────────────────────────────────────────────────────────── */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--r-card);
-      padding: 24px;
-      box-shadow: var(--shadow-sm);
-      transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
-    }
-    .card:hover {
-      box-shadow: var(--shadow-md);
-      border-color: var(--border-mid);
+    .badge-neutral { background: #F1F5F9; color: var(--text-sec); border-color: var(--border); }
+    .badge-live    { background: #DCFCE7; color: #15803D; border-color: #BBF7D0; }
+    .badge-module  {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      padding: 3px 7px; border-radius: 4px;
+      background: #F1F5F9; color: var(--text-sec); border-color: var(--border);
     }
 
-    /* ── Ping dot ───────────────────────────────────────────────────────── */
+    /* ── Ping dot ────────────────────────────────────────────────────────── */
     .ping {
-      display: inline-block;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #16A34A;
-      animation: ping-anim 2.2s ease-in-out infinite;
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; background: #16A34A; flex-shrink: 0;
+      animation: ping-anim 2.4s ease-in-out infinite;
     }
     @keyframes ping-anim {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.65; transform: scale(1.35); }
+      50% { opacity: 0.55; transform: scale(1.45); }
     }
+
+    /* ── Cards ───────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-card); padding: 22px;
+      box-shadow: var(--shadow-xs);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .card:hover { box-shadow: var(--shadow-sm); border-color: var(--border-mid); }
+
+    /* ── Divider ─────────────────────────────────────────────────────────── */
+    .divider { height: 1px; background: var(--border); border: none; margin: 0; }
+
+    /* ── Utility — replaces inline styles ───────────────────────────────── */
+    .overline-block   { display: block; margin-bottom: 10px; }
+    .overline-block-12 { display: block; margin-bottom: 12px; }
+    .h2-platform { font-size: clamp(22px, 3vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
+    .btn-self-start { align-self: flex-start; }
+    .cta-h2-mb  { margin-bottom: 16px; }
+    .cta-sub-mb { margin-bottom: 32px; }
+    .cta-ctas-mb { margin-bottom: 20px; }
+    .record-id  { font-weight: 600; color: var(--text); }
+    .mdr-v      { font-weight: 700; color: var(--text); }
+    .mdr-amber  { font-weight: 700; color: #D97706; }
+    .mdr-red    { font-weight: 700; color: #DC2626; }
+    .portal-icon--vol { background: #EEF2FF; border-color: #C7D2FE; color: #4338CA; }
+    .portal-icon--int { background: #FFFBEB; border-color: #FDE68A; color: #92400E; }
+    .portal-icon--cou { background: #F0FDF4; border-color: #A7F3D0; color: #065F46; }
+    .portal-icon--adm { background: #FFF1F2; border-color: #FECDD3; color: #9F1239; }
+    .portal-icon--trn { background: #F5F3FF; border-color: #DDD6FE; color: #5B21B6; }
+    .portal-link--cou { border-color: #BFDBFE; }
+    .badge-xs   { font-size: 10px; padding: 2px 6px; vertical-align: middle; margin-left: 3px; }
+    .badge-xs .ping { width: 5px; height: 5px; }
+    .badge-noshrink { flex-shrink: 0; }
+    .module-badge-group { display: flex; gap: 6px; align-items: center; }
+    .text-hint  { font-size: 12px; color: var(--text-muted); }
 
     /* ════════════════════════════════════════════════════════════════════
        NAV
     ════════════════════════════════════════════════════════════════════ */
     #nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(255,255,255,0.90);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,0.96);
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      transition: box-shadow 0.25s;
+      transition: box-shadow 0.2s;
     }
-    #nav.scrolled { box-shadow: var(--shadow-md); }
+    #nav.scrolled { box-shadow: var(--shadow-sm); }
     .nav-inner {
-      max-width: 1160px; margin: 0 auto;
-      padding: 0 24px;
-      height: 64px;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 20px;
+      max-width: 1160px; margin: 0 auto; padding: 0 24px;
+      height: 60px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
     }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; flex-shrink: 0;
-    }
+    .nav-logo { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
     .nav-logo-mark {
-      width: 34px; height: 34px; border-radius: 10px;
-      background: var(--accent);
-      color: #fff;
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--accent); color: #fff;
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 900; letter-spacing: -0.5px;
+      font-size: 11px; font-weight: 800; letter-spacing: -0.3px;
     }
-    .nav-logo-text {
-      font-size: 15px; font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-    .nav-links {
-      display: none;
-      list-style: none;
-      align-items: center;
-      gap: 28px;
-    }
+    .nav-logo-name { font-size: 14.5px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+    .nav-links { display: none; align-items: center; gap: 2px; }
     @media (min-width: 768px) { .nav-links { display: flex; } }
     .nav-links a {
-      font-size: 14px; font-weight: 500;
-      color: var(--text-sec);
-      text-decoration: none;
-      transition: color 0.15s;
+      font-size: 13.5px; font-weight: 500; color: var(--text-sec);
+      padding: 6px 10px; border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
     }
-    .nav-links a:hover { color: var(--text); }
-    .nav-cta { flex-shrink: 0; }
+    .nav-links a:hover { color: var(--text); background: var(--bg-alt); }
+    .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .nav-hamburger {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 6px;
+      border: 1px solid var(--border); background: none;
+      cursor: pointer; color: var(--text-sec);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .nav-hamburger:hover { border-color: var(--border-mid); background: var(--bg-alt); }
+    @media (min-width: 768px) { .nav-hamburger { display: none; } }
+
+    /* Mobile nav */
+    .nav-mobile {
+      display: none; position: fixed;
+      top: 60px; left: 0; right: 0;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      padding: 8px 24px 16px; z-index: 199; box-shadow: var(--shadow-md);
+    }
+    .nav-mobile.open { display: block; }
+    .nav-mobile a {
+      display: block; font-size: 14px; font-weight: 500;
+      color: var(--text-sec); padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--text); }
 
     /* ════════════════════════════════════════════════════════════════════
        HERO
     ════════════════════════════════════════════════════════════════════ */
     .hero-section {
-      padding: 128px 24px 88px;
-      max-width: 1160px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 28px;
+      padding: 116px 24px 80px; max-width: 1160px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 24px;
     }
     .hero-h1 {
-      font-size: clamp(38px, 6.5vw, 72px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
+      font-size: clamp(34px, 5.5vw, 62px);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.08;
     }
     .hero-h1 .accent-word { color: var(--accent); }
     .hero-sub {
-      font-size: clamp(16px, 2vw, 19px);
-      color: var(--text-sec);
-      max-width: 580px;
-      line-height: 1.75;
+      font-size: clamp(15px, 1.8vw, 17px); color: var(--text-sec);
+      max-width: 560px; line-height: 1.75;
     }
-    .hero-ctas {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+    .hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
     /* Stats row */
     .stats-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-      width: 100%;
-      max-width: 640px;
-      box-shadow: var(--shadow-sm);
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; width: 100%; max-width: 600px;
+      box-shadow: var(--shadow-xs);
     }
-    @media (min-width: 480px) {
-      .stats-row { grid-template-columns: repeat(4, 1fr); }
-    }
-    .stat-cell {
-      background: var(--bg);
-      padding: 20px 12px;
-      text-align: center;
-    }
+    @media (min-width: 480px) { .stats-row { grid-template-columns: repeat(4, 1fr); } }
+    .stat-cell { background: var(--bg); padding: 18px 10px; text-align: center; }
     .stat-number {
-      font-size: 28px; font-weight: 900;
-      color: var(--accent);
-      letter-spacing: -0.03em;
-      line-height: 1;
+      font-size: 26px; font-weight: 800; color: var(--accent);
+      letter-spacing: -0.03em; line-height: 1;
     }
-    .stat-label {
-      font-size: 11px; font-weight: 500;
-      color: var(--text-sec);
-      margin-top: 5px;
-    }
+    .stat-label { font-size: 11px; font-weight: 500; color: var(--text-sec); margin-top: 5px; line-height: 1.4; }
 
     /* ════════════════════════════════════════════════════════════════════
        TRUST STRIP
     ════════════════════════════════════════════════════════════════════ */
     .trust-strip {
       background: var(--bg-alt);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 24px;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 13px 24px;
     }
     .trust-inner {
       max-width: 1160px; margin: 0 auto;
       display: flex; flex-wrap: wrap;
       align-items: center; justify-content: center;
-      gap: 10px 20px;
+      gap: 8px 18px;
     }
     .trust-item {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 11.5px; font-weight: 600;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--text-sec);
+      display: flex; align-items: center; gap: 7px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-sec);
     }
     .trust-item svg { color: var(--accent); flex-shrink: 0; }
-    .trust-sep {
-      width: 3px; height: 3px; border-radius: 50%;
-      background: var(--border-mid);
-    }
-    @media (max-width: 480px) { .trust-sep { display: none; } }
+    .trust-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--border-mid); flex-shrink: 0; }
+    @media (max-width: 540px) { .trust-sep { display: none; } }
 
     /* ════════════════════════════════════════════════════════════════════
        MODULES
     ════════════════════════════════════════════════════════════════════ */
     .modules-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
+      display: grid; grid-template-columns: 1fr; gap: 12px;
     }
     @media (min-width: 600px)  { .modules-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { .modules-grid { grid-template-columns: repeat(3, 1fr); } }
-    .module-card {
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .module-card-top {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+
+    .module-card { display: flex; flex-direction: column; gap: 16px; }
+    .module-card-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 10px;
     }
     .module-icon {
-      width: 42px; height: 42px; border-radius: 12px;
+      width: 40px; height: 40px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-      border: 1px solid;
+      flex-shrink: 0; border: 1px solid;
     }
-    .module-tag-row {
-      display: flex; flex-wrap: wrap; gap: 6px;
-      margin-top: auto; padding-top: 8px;
-    }
-    .tag {
-      display: inline-block;
-      font-size: 11px; font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 7px; border: 1px solid;
-    }
+    .module-body { flex: 1; }
+    .module-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 7px; }
+    .module-body p  { font-size: 13.5px; color: var(--text-sec); line-height: 1.65; }
+    .module-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; padding-top: 4px; }
+    .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 5px; border: 1px solid; }
 
     /* Module colour system */
-    .m-indigo  { background: #EEF2FF; border-color: #C7D2FE; }
-    .m-amber   { background: #FFFBEB; border-color: #FDE68A; }
-    .m-teal    { background: #F0FDF4; border-color: #A7F3D0; }
-    .m-rose    { background: #FFF1F2; border-color: #FECDD3; }
-    .m-violet  { background: #F5F3FF; border-color: #DDD6FE; }
+    .m-indigo { background: #EEF2FF; border-color: #C7D2FE; color: #4338CA; }
+    .m-amber  { background: #FFFBEB; border-color: #FDE68A; color: #92400E; }
+    .m-teal   { background: #F0FDF4; border-color: #A7F3D0; color: #065F46; }
+    .m-rose   { background: #FFF1F2; border-color: #FECDD3; color: #9F1239; }
+    .m-violet { background: #F5F3FF; border-color: #DDD6FE; color: #5B21B6; }
+    .t-indigo { background: #EEF2FF; color: #4338CA; border-color: #C7D2FE; }
+    .t-amber  { background: #FFFBEB; color: #92400E; border-color: #FCD34D; }
+    .t-teal   { background: #ECFDF5; color: #065F46; border-color: #6EE7B7; }
+    .t-rose   { background: #FFF1F2; color: #9F1239; border-color: #FECDD3; }
+    .t-violet { background: #F5F3FF; color: #5B21B6; border-color: #C4B5FD; }
 
-    .t-indigo  { background: #EEF2FF; color: #4338CA; border-color: #C7D2FE; }
-    .t-amber   { background: #FFFBEB; color: #B45309; border-color: #FCD34D; }
-    .t-teal    { background: #F0FDF4; color: #047857; border-color: #6EE7B7; }
-    .t-rose    { background: #FFF1F2; color: #BE123C; border-color: #FECDD3; }
-    .t-violet  { background: #F5F3FF; color: #5B21B6; border-color: #C4B5FD; }
+    .module-card.featured {
+      border-color: #BFDBFE;
+      background: linear-gradient(155deg, #F0F7FF 0%, #FFFFFF 55%);
+    }
 
-    .icon-indigo  { background: #EEF2FF; border-color: #C7D2FE; }
-    .icon-amber   { background: #FFFBEB; border-color: #FDE68A; }
-    .icon-teal    { background: #F0FDF4; border-color: #A7F3D0; }
-    .icon-rose    { background: #FFF1F2; border-color: #FECDD3; }
-    .icon-violet  { background: #F5F3FF; border-color: #DDD6FE; }
+    /* Inline data preview */
+    .module-data-preview {
+      background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 14px; font-size: 12.5px;
+    }
+    .module-data-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 5px 0;
+    }
+    .module-data-row + .module-data-row { border-top: 1px solid var(--border); }
+    .module-data-row span:first-child { color: var(--text-sec); }
+    .module-data-row span:last-child  { font-weight: 700; }
 
     /* ════════════════════════════════════════════════════════════════════
-       METRICS
+       PLATFORM OVERVIEW
     ════════════════════════════════════════════════════════════════════ */
-    .metrics-box {
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      overflow: hidden;
+    .overview-box {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden;
     }
-    .metrics-inner {
-      padding: 40px 28px;
-    }
-    @media (min-width: 768px) { .metrics-inner { padding: 52px 48px; } }
-    .metrics-header {
-      display: flex; flex-direction: column; gap: 20px; margin-bottom: 36px;
+    .overview-inner { padding: 40px 32px; }
+    @media (min-width: 768px) { .overview-inner { padding: 52px 48px; } }
+    .overview-header {
+      display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;
     }
     @media (min-width: 768px) {
-      .metrics-header { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+      .overview-header { flex-direction: row; align-items: flex-end; justify-content: space-between; }
     }
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    @media (min-width: 640px) { .metrics-grid { grid-template-columns: repeat(4, 1fr); } }
+    .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (min-width: 560px) { .metrics-grid { grid-template-columns: repeat(4, 1fr); } }
     .metric-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 16px;
+      background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 14px;
     }
-    .metric-num {
-      font-size: 42px; font-weight: 900;
-      letter-spacing: -0.05em; line-height: 1;
-    }
-    .metric-label {
-      font-size: 13px; color: var(--text-sec);
-      margin-top: 6px; font-weight: 500;
-    }
-    .c-blue   { color: var(--accent); }
-    .c-amber  { color: #D97706; }
-    .c-red    { color: #DC2626; }
-    .c-slate  { color: var(--text); }
-    .c-green  { color: #16A34A; }
+    .metric-num { font-size: 36px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+    .metric-label { font-size: 12.5px; color: var(--text-sec); margin-top: 6px; font-weight: 500; line-height: 1.4; }
+    .c-blue  { color: var(--accent); }
+    .c-amber { color: #D97706; }
+    .c-red   { color: #DC2626; }
+    .c-slate { color: var(--text); }
+    .c-green { color: #16A34A; }
 
-    .live-record {
-      margin-top: 10px;
-      padding: 14px 18px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      font-size: 13px; color: var(--text-sec);
-      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    .sample-record {
+      margin-top: 10px; padding: 13px 16px;
+      background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: 10px; font-size: 13px; color: var(--text-sec);
+      display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
     }
+    .sep { color: var(--text-muted); -webkit-user-select: none; user-select: none; }
 
     /* ════════════════════════════════════════════════════════════════════
        FEATURES
     ════════════════════════════════════════════════════════════════════ */
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
+    .features-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
     @media (min-width: 600px)  { .features-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
-    .feature-card {
-      display: flex; align-items: flex-start; gap: 16px;
-    }
+
+    .feature-card { display: flex; align-items: flex-start; gap: 16px; }
     .feature-icon {
-      width: 42px; height: 42px; flex-shrink: 0;
-      border-radius: 12px;
-      background: var(--accent-tint);
-      border: 1px solid #BFDBFE;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 19px;
+      width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px;
+      background: var(--accent-tint); border: 1px solid #BFDBFE;
+      display: flex; align-items: center; justify-content: center; color: var(--accent);
     }
-    .feature-body h3 {
-      font-size: 15px; font-weight: 700; margin-bottom: 5px;
-    }
-    .feature-body p {
-      font-size: 13.5px; color: var(--text-sec); line-height: 1.65;
-    }
+    .feature-body h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 5px; }
+    .feature-body p  { font-size: 13.5px; color: var(--text-sec); line-height: 1.65; }
 
     /* ════════════════════════════════════════════════════════════════════
        CTA
     ════════════════════════════════════════════════════════════════════ */
     .cta-box {
-      background: linear-gradient(140deg, #EFF6FF 0%, #F0F9FF 55%, #F7FBFF 100%);
-      border: 1px solid #BFDBFE;
-      border-radius: 32px;
-      padding: 72px 32px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+      background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: 18px; padding: 64px 40px; text-align: center;
     }
-    @media (min-width: 768px) { .cta-box { padding: 88px 56px; } }
-    .cta-box::before {
-      content: '';
-      position: absolute;
-      top: -100px; right: -100px;
-      width: 340px; height: 340px;
-      background: radial-gradient(circle, rgba(37,99,235,.06), transparent 70%);
-      pointer-events: none;
-    }
-    .cta-box::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -80px;
-      width: 280px; height: 280px;
-      background: radial-gradient(circle, rgba(37,99,235,.04), transparent 70%);
-      pointer-events: none;
-    }
-    .cta-h2 {
-      font-size: clamp(30px, 5vw, 52px);
-    }
-    .cta-meta {
-      font-size: 12px; color: var(--text-muted); margin-top: 24px;
-    }
-    .cta-ctas {
-      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
-    }
+    @media (min-width: 768px) { .cta-box { padding: 80px 64px; } }
+    .cta-h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 700; letter-spacing: -0.025em; }
+    .cta-sub { font-size: 16px; color: var(--text-sec); max-width: 460px; margin: 0 auto; line-height: 1.7; }
+    .cta-ctas { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .cta-meta { font-size: 12px; color: var(--text-muted); }
 
     /* ════════════════════════════════════════════════════════════════════
        DEMO PORTALS
     ════════════════════════════════════════════════════════════════════ */
-    .portals-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
+    .portals-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
     @media (min-width: 560px)  { .portals-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { .portals-grid { grid-template-columns: repeat(3, 1fr); } }
+
     .portal-link {
-      display: flex; align-items: center; gap: 14px;
-      text-decoration: none; color: var(--text);
+      display: flex; align-items: center; gap: 14px; color: var(--text);
+      transition: box-shadow 0.2s, border-color 0.2s;
     }
     .portal-link:hover { box-shadow: var(--shadow-md); border-color: #BFDBFE; }
-    .portal-emoji {
-      font-size: 22px; flex-shrink: 0; line-height: 1;
+    .portal-icon {
+      width: 38px; height: 38px; flex-shrink: 0; border-radius: 9px;
+      background: var(--accent-tint); border: 1px solid #BFDBFE;
+      display: flex; align-items: center; justify-content: center; color: var(--accent);
     }
+    .portal-body { flex: 1; min-width: 0; }
     .portal-title { font-size: 14px; font-weight: 600; }
     .portal-sub   { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
-    .portal-arrow {
-      margin-left: auto; font-size: 13px;
-      color: var(--text-muted);
-      transition: color 0.15s, transform 0.15s;
-      flex-shrink: 0;
+    .portal-arrow { flex-shrink: 0; color: var(--text-muted); transition: color 0.15s; }
+    .portal-link:hover .portal-arrow { color: var(--accent); }
+
+    /* Demo credentials */
+    .creds-card {
+      background: var(--bg); border: 1px solid #BFDBFE;
+      border-radius: var(--r-card); padding: 22px 24px; margin-bottom: 20px;
     }
-    .portal-link:hover .portal-arrow { color: var(--accent); transform: translate(2px, -2px); }
+    .creds-top {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+    }
+    .creds-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    @media (min-width: 640px) { .creds-grid { grid-template-columns: repeat(4, 1fr); } }
+    .cred-item { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; }
+    .cred-label { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+    .cred-value { font-size: 12.5px; font-weight: 700; color: var(--text); }
+    .cred-value.mono { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--accent); letter-spacing: 0.01em; }
+    .creds-note { font-size: 12px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; }
 
     /* ════════════════════════════════════════════════════════════════════
        FOOTER
     ════════════════════════════════════════════════════════════════════ */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 36px 24px;
-      background: var(--bg);
-    }
-    .footer-inner {
-      max-width: 1160px; margin: 0 auto;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 14px;
-      text-align: center;
+    footer { border-top: 1px solid var(--border); background: var(--bg); }
+    .footer-top {
+      max-width: 1160px; margin: 0 auto; padding: 48px 24px 36px;
+      display: grid; grid-template-columns: 1fr; gap: 36px;
     }
     @media (min-width: 640px) {
-      .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+      .footer-top { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
     }
-    .footer-logo {
-      display: flex; align-items: center; gap: 10px;
-    }
+    .footer-brand-desc { font-size: 13px; color: var(--text-sec); line-height: 1.65; max-width: 240px; margin-top: 12px; }
+    .footer-logo { display: flex; align-items: center; gap: 9px; }
     .footer-logo-mark {
-      width: 28px; height: 28px; border-radius: 8px;
+      width: 28px; height: 28px; border-radius: 7px;
       background: var(--accent); color: #fff;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 900; letter-spacing: -0.3px;
+      font-size: 10px; font-weight: 800; letter-spacing: -0.3px;
     }
-    .footer-logo-name { font-size: 13px; font-weight: 700; color: var(--text); }
-    .footer-right { font-size: 12px; color: var(--text-muted); }
+    .footer-logo-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .footer-col-title { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); margin-bottom: 14px; }
+    .footer-col-links { display: flex; flex-direction: column; gap: 8px; }
+    .footer-col-links a { font-size: 13.5px; color: var(--text-sec); transition: color 0.15s; }
+    .footer-col-links a:hover { color: var(--text); }
+    .footer-bottom {
+      max-width: 1160px; margin: 0 auto; padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+    }
+    @media (min-width: 640px) {
+      .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; }
+    }
+    .footer-legal { font-size: 12px; color: var(--text-muted); }
 
     /* ════════════════════════════════════════════════════════════════════
        MOBILE OVERRIDES
     ════════════════════════════════════════════════════════════════════ */
     @media (max-width: 480px) {
-      .hero-section    { padding: 104px 20px 72px; gap: 24px; }
+      .hero-section    { padding: 96px 20px 64px; gap: 20px; }
       .hero-ctas       { flex-direction: column; width: 100%; }
-      .hero-ctas .btn  { width: 100%; font-size: 16px; padding: 15px 24px; border-radius: 16px; }
+      .hero-ctas .btn  { width: 100%; justify-content: center; font-size: 15px; padding: 13px 20px; }
       .stats-row       { max-width: 100%; }
-      .stat-number     { font-size: 26px; }
-      .section         { padding: 60px 20px; }
-      .cta-box         { padding: 52px 20px; border-radius: 24px; }
+      .section         { padding: 56px 20px; }
+      .cta-box         { padding: 48px 20px; border-radius: var(--r-card); }
       .cta-ctas        { flex-direction: column; }
-      .cta-ctas .btn   { width: 100%; font-size: 16px; padding: 15px 24px; border-radius: 16px; }
-      .metrics-inner   { padding: 32px 20px; }
-      .metrics-header  { gap: 16px; }
-      .metric-num      { font-size: 36px; }
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       SECTION SPACING (shared)
-    ════════════════════════════════════════════════════════════════════ */
-    .section-head        { text-align: center; margin-bottom: 52px; }
-    .section-head h2     { font-size: clamp(28px, 4vw, 44px); margin-top: 10px; }
-    .section-head p      { font-size: 15.5px; color: var(--text-sec); margin-top: 14px; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.7; }
-
-    .divider-line { height: 1px; background: var(--border); border: none; margin: 0; }
-
-    /* ════════════════════════════════════════════════════════════════════
-       DEMO CREDENTIALS CARD
-    ════════════════════════════════════════════════════════════════════ */
-    .creds-card {
-      background: var(--bg);
-      border: 1.5px solid #BFDBFE;
-      border-radius: 20px;
-      padding: 24px 28px;
-      margin-bottom: 28px;
-      box-shadow: 0 2px 12px rgba(37,99,235,.07);
-    }
-    .creds-top {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
-    }
-    .creds-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    @media (min-width: 640px) { .creds-grid { grid-template-columns: repeat(4, 1fr); } }
-    .cred-item {
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 14px;
-    }
-    .cred-label {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--text-muted); margin-bottom: 5px;
-    }
-    .cred-value {
-      font-size: 13px; font-weight: 700;
-      color: var(--text); font-family: 'Inter', monospace;
-      word-break: break-all;
-    }
-    .cred-value.mono {
-      font-size: 13px; letter-spacing: 0.02em;
-      color: var(--accent);
-    }
-    .creds-note {
-      font-size: 12px; color: var(--text-muted);
-      margin-top: 14px; line-height: 1.6;
+      .cta-ctas .btn   { width: 100%; justify-content: center; }
+      .overview-inner  { padding: 28px 20px; }
+      .metric-num      { font-size: 32px; }
     }
   </style>
 </head>
 
 <body>
 
-<!-- ══════════════════════════════════════════════════════════════════════
+<!-- ════════════════════════════════════════════════════════════════════
      NAV
-══════════════════════════════════════════════════════════════════════ -->
+════════════════════════════════════════════════════════════════════ -->
 <header id="nav" role="banner">
   <div class="nav-inner">
-    <!-- Logo -->
     <a href="#" class="nav-logo" aria-label="ICOIP home">
       <div class="nav-logo-mark" aria-hidden="true">IC</div>
-      <span class="nav-logo-text">ICOIP</span>
+      <span class="nav-logo-name">ICOIP</span>
     </a>
 
-    <!-- Desktop links -->
-    <ul class="nav-links" role="list" aria-label="Primary navigation">
-      <li><a href="#modules">Modules</a></li>
-      <li><a href="#metrics">Platform</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#demo">Demo Access</a></li>
-    </ul>
+    <nav aria-label="Primary navigation">
+      <ul class="nav-links">
+        <li><a href="#modules">Modules</a></li>
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#features">Capabilities</a></li>
+        <li><a href="#demo">Demo Access</a></li>
+        <li><a href="#cta">Contact</a></li>
+      </ul>
+    </nav>
 
-    <!-- CTA -->
-    <div class="nav-cta">
+    <div class="nav-right">
       <a href="#cta" class="btn btn-primary btn-sm">Request a Demo</a>
+      <button type="button" class="nav-hamburger" id="hamburger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-mobile">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+          <path d="M1.5 3h12M1.5 7.5h12M1.5 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
   </div>
 </header>
 
+<nav class="nav-mobile" id="nav-mobile" aria-label="Mobile navigation">
+  <a href="#modules">Modules</a>
+  <a href="#platform">Platform</a>
+  <a href="#features">Capabilities</a>
+  <a href="#demo">Demo Access</a>
+  <a href="#cta">Contact</a>
+</nav>
 
-<!-- ══════════════════════════════════════════════════════════════════════
+
+<!-- ════════════════════════════════════════════════════════════════════
      HERO
-══════════════════════════════════════════════════════════════════════ -->
+════════════════════════════════════════════════════════════════════ -->
 <main>
 <section aria-labelledby="hero-h1">
   <div class="hero-section">
 
-    <!-- Live badge -->
-    <div>
-      <span class="badge badge-live">
-        <span class="ping" aria-hidden="true"></span>
-        Live Demo Available
-      </span>
-    </div>
+    <span class="badge badge-live">
+      <span class="ping" aria-hidden="true"></span>
+      Live Demo Available
+    </span>
 
-    <!-- Headline -->
     <h1 id="hero-h1" class="hero-h1">
-      One Platform.<br />
-      <span class="accent-word">Five Modules.</span><br />
-      Unified Operations.
+      One Unified Platform<br />
+      for <span class="accent-word">Social Service</span><br />
+      Organisations
     </h1>
 
-    <!-- Sub -->
     <p class="hero-sub">
-      ICOIP is a unified operations platform purpose-built for social service organisations —
-      connecting volunteer management, client services, counselling, governance, and
-      workforce development in one secure, role-governed environment.
+      ICOIP connects volunteer management, client intake, counselling,
+      governance, and workforce development in one secure, role-governed
+      environment — with audit trails, structured workflows, and no
+      technical setup required.
     </p>
 
-    <!-- CTAs -->
     <div class="hero-ctas">
-      <a href="#cta" class="btn btn-primary">
-        Request a Demo
-      </a>
-      <a href="#modules" class="btn btn-secondary">
-        Explore Modules
-      </a>
+      <a href="#cta" class="btn btn-primary btn-lg">Request a Demo</a>
+      <a href="#modules" class="btn btn-secondary btn-lg">Explore Modules</a>
     </div>
 
-    <!-- Stats row -->
     <div class="stats-row" role="list" aria-label="Platform at a glance">
       <div class="stat-cell" role="listitem">
         <div class="stat-number">5</div>
-        <div class="stat-label">Integrated Modules</div>
+        <div class="stat-label">Integrated<br/>Modules</div>
       </div>
       <div class="stat-cell" role="listitem">
         <div class="stat-number">9</div>
-        <div class="stat-label">Permission Levels</div>
+        <div class="stat-label">Permission<br/>Levels</div>
       </div>
       <div class="stat-cell" role="listitem">
-        <div class="stat-number">1</div>
-        <div class="stat-label">Secure Platform</div>
+        <div class="stat-number">6</div>
+        <div class="stat-label">Role-Based<br/>Portals</div>
       </div>
       <div class="stat-cell" role="listitem">
-        <div class="stat-number">0</div>
-        <div class="stat-label">Silos</div>
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Audit<br/>Traceability</div>
       </div>
     </div>
 
@@ -707,42 +591,67 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
+<!-- ════════════════════════════════════════════════════════════════════
      TRUST STRIP
-══════════════════════════════════════════════════════════════════════ -->
+════════════════════════════════════════════════════════════════════ -->
 <div class="trust-strip" role="complementary" aria-label="Platform credentials">
   <div class="trust-inner">
+
     <div class="trust-item">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 2L3 6v5c0 4.418 3.134 8.558 7 9.5C13.866 19.558 17 15.418 17 11V6L10 2z" fill="currentColor" opacity=".2"/><path d="M10 2L3 6v5c0 4.418 3.134 8.558 7 9.5C13.866 19.558 17 15.418 17 11V6L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-      Built for Social Service Organisations
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 2L3 6v5c0 4.418 3.134 8.558 7 9.5C13.866 19.558 17 15.418 17 11V6L10 2z" fill="currentColor" opacity=".18"/>
+        <path d="M10 2L3 6v5c0 4.418 3.134 8.558 7 9.5C13.866 19.558 17 15.418 17 11V6L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      Purpose-Built for Social Service
     </div>
     <div class="trust-sep" aria-hidden="true"></div>
+
     <div class="trust-item">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
       Role-Based Access Control
     </div>
     <div class="trust-sep" aria-hidden="true"></div>
+
     <div class="trust-item">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 6h12M4 10h8M4 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M4 5h12M4 9.5h8M4 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
       Audit-Ready Governance
     </div>
     <div class="trust-sep" aria-hidden="true"></div>
+
     <div class="trust-item">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 10h6M10 7v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      Cross-Team Coordination
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <rect x="2" y="3" width="16" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M6 8h8M6 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Structured Cross-Team Coordination
     </div>
+    <div class="trust-sep" aria-hidden="true"></div>
+
+    <div class="trust-item">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 2L3 6v5c0 4.418 3.134 8.558 7 9.5C13.866 19.558 17 15.418 17 11V6L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M7.5 10.5l2 2 3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      No Technical Setup Required
+    </div>
+
   </div>
 </div>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
+<!-- ════════════════════════════════════════════════════════════════════
      MODULES
-══════════════════════════════════════════════════════════════════════ -->
+════════════════════════════════════════════════════════════════════ -->
 <section id="modules" aria-labelledby="modules-h2">
   <div class="section">
-    <div class="section-head">
-      <p class="overline">Five Modules. One Platform.</p>
-      <h2 id="modules-h2">Every mission-critical function — unified.</h2>
+    <div class="section-head centered">
+      <span class="overline">Five Modules. One Platform.</span>
+      <h2 id="modules-h2">Every core function — connected.</h2>
       <p>Switch between modules instantly. Shared access controls, unified data, and consistent workflows across your entire organisation.</p>
     </div>
 
@@ -750,17 +659,22 @@
 
       <!-- VOL -->
       <div class="card module-card">
-        <div class="module-card-top">
-          <div class="module-icon icon-indigo" aria-hidden="true">🤝</div>
-          <span class="badge badge-neutral">VOL</span>
+        <div class="module-card-header">
+          <div class="module-icon m-indigo" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <span class="badge badge-module">VOL</span>
         </div>
-        <div>
-          <h3 style="font-size:17px; margin-bottom:6px;">Volunteer Management</h3>
-          <p style="font-size:13.5px; color:var(--text-sec); line-height:1.65;">
-            End-to-end volunteer lifecycle management — from onboarding and scheduling to hours tracking, engagement reporting, and formal recognition.
-          </p>
+        <div class="module-body">
+          <h3>Volunteer Management</h3>
+          <p>End-to-end volunteer lifecycle management — from onboarding and scheduling to hours tracking, engagement reporting, and formal recognition.</p>
         </div>
-        <div class="module-tag-row">
+        <div class="module-tags">
           <span class="tag t-indigo">Onboarding</span>
           <span class="tag t-indigo">Scheduling</span>
           <span class="tag t-indigo">Hours Tracking</span>
@@ -769,17 +683,22 @@
 
       <!-- INT -->
       <div class="card module-card">
-        <div class="module-card-top">
-          <div class="module-icon icon-amber" aria-hidden="true">🧾</div>
-          <span class="badge badge-neutral">INT</span>
+        <div class="module-card-header">
+          <div class="module-icon m-amber" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <span class="badge badge-module">INT</span>
         </div>
-        <div>
-          <h3 style="font-size:17px; margin-bottom:6px;">Intake &amp; Referral</h3>
-          <p style="font-size:13.5px; color:var(--text-sec); line-height:1.65;">
-            Structured intake workflows for beneficiary screening, referral coordination, eligibility assessment, and automated case assignment with full audit trail.
-          </p>
+        <div class="module-body">
+          <h3>Intake &amp; Referral</h3>
+          <p>Structured intake workflows for beneficiary screening, referral coordination, eligibility assessment, and automated case assignment with a full audit trail.</p>
         </div>
-        <div class="module-tag-row">
+        <div class="module-tags">
           <span class="tag t-amber">Screening</span>
           <span class="tag t-amber">Referral Flow</span>
           <span class="tag t-amber">Case Assignment</span>
@@ -787,36 +706,37 @@
       </div>
 
       <!-- COU — featured -->
-      <div class="card module-card" style="border-color:#BFDBFE; background:linear-gradient(140deg,#EFF6FF 0%,#FFFFFF 100%);">
-        <div class="module-card-top">
-          <div class="module-icon icon-teal" aria-hidden="true">💬</div>
-          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+      <div class="card module-card featured">
+        <div class="module-card-header">
+          <div class="module-icon m-teal" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="module-badge-group">
             <span class="badge badge-live"><span class="ping" aria-hidden="true"></span>Active Demo</span>
-            <span class="badge badge-neutral">COU</span>
+            <span class="badge badge-module">COU</span>
           </div>
         </div>
-        <div>
-          <h3 style="font-size:17px; margin-bottom:6px;">Counselling &amp; Client Services</h3>
-          <p style="font-size:13.5px; color:var(--text-sec); line-height:1.65;">
-            Full session management, structured case notes, risk-level monitoring, appointment scheduling, and coordinated follow-up actions across your client services team.
-          </p>
+        <div class="module-body">
+          <h3>Counselling &amp; Client Services</h3>
+          <p>Full session management, structured case notes, risk-level monitoring, appointment scheduling, and coordinated follow-up actions across your client services team.</p>
         </div>
-        <!-- Live summary panel -->
-        <div style="background:var(--bg-alt); border:1px solid var(--border); border-radius:14px; padding:14px 16px; font-size:13px;">
-          <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border);">
-            <span style="color:var(--text-sec);">Active sessions</span>
-            <span style="font-weight:700; color:var(--text);">3</span>
+        <div class="module-data-preview" aria-label="Sample session data">
+          <div class="module-data-row">
+            <span>Active sessions</span>
+            <span class="mdr-v">3</span>
           </div>
-          <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border);">
-            <span style="color:var(--text-sec);">Pending follow-ups</span>
-            <span style="font-weight:700; color:#D97706;">2</span>
+          <div class="module-data-row">
+            <span>Pending follow-ups</span>
+            <span class="mdr-amber">2</span>
           </div>
-          <div style="display:flex; justify-content:space-between; padding:5px 0;">
-            <span style="color:var(--text-sec);">High-priority cases</span>
-            <span style="font-weight:700; color:#DC2626;">1</span>
+          <div class="module-data-row">
+            <span>High-priority cases</span>
+            <span class="mdr-red">1</span>
           </div>
         </div>
-        <div class="module-tag-row">
+        <div class="module-tags">
           <span class="tag t-teal">Case Notes</span>
           <span class="tag t-teal">Risk Tracking</span>
           <span class="tag t-teal">Appointments</span>
@@ -825,17 +745,19 @@
 
       <!-- ADM -->
       <div class="card module-card">
-        <div class="module-card-top">
-          <div class="module-icon icon-rose" aria-hidden="true">🛡️</div>
-          <span class="badge badge-neutral">ADM</span>
+        <div class="module-card-header">
+          <div class="module-icon m-rose" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <span class="badge badge-module">ADM</span>
         </div>
-        <div>
-          <h3 style="font-size:17px; margin-bottom:6px;">Admin Governance</h3>
-          <p style="font-size:13.5px; color:var(--text-sec); line-height:1.65;">
-            Centralised oversight with approval workflows, organisation-wide reporting, access management, and audit controls — giving leadership full visibility across all operations.
-          </p>
+        <div class="module-body">
+          <h3>Admin Governance</h3>
+          <p>Centralised oversight with approval workflows, organisation-wide reporting, access management, and audit controls — giving leadership full visibility across all operations.</p>
         </div>
-        <div class="module-tag-row">
+        <div class="module-tags">
           <span class="tag t-rose">Approvals</span>
           <span class="tag t-rose">Audit Trail</span>
           <span class="tag t-rose">Reporting</span>
@@ -844,17 +766,20 @@
 
       <!-- TRN -->
       <div class="card module-card">
-        <div class="module-card-top">
-          <div class="module-icon icon-violet" aria-hidden="true">📚</div>
-          <span class="badge badge-neutral">TRN</span>
+        <div class="module-card-header">
+          <div class="module-icon m-violet" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <span class="badge badge-module">TRN</span>
         </div>
-        <div>
-          <h3 style="font-size:17px; margin-bottom:6px;">Training &amp; Curriculum</h3>
-          <p style="font-size:13.5px; color:var(--text-sec); line-height:1.65;">
-            WSQ-aligned curriculum planning, structured training requests, deliverable tracking, and workforce development management for operational and programme teams.
-          </p>
+        <div class="module-body">
+          <h3>Training &amp; Curriculum</h3>
+          <p>WSQ-aligned curriculum planning, structured training requests, deliverable tracking, and workforce development management for operational and programme teams.</p>
         </div>
-        <div class="module-tag-row">
+        <div class="module-tags">
           <span class="tag t-violet">WSQ-Aligned</span>
           <span class="tag t-violet">Curriculum Dev</span>
           <span class="tag t-violet">Workforce Dev</span>
@@ -866,35 +791,33 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
-     LIVE METRICS
-══════════════════════════════════════════════════════════════════════ -->
-<div class="section-bg">
-<section id="metrics" aria-labelledby="metrics-h2">
+<!-- ════════════════════════════════════════════════════════════════════
+     PLATFORM OVERVIEW
+════════════════════════════════════════════════════════════════════ -->
+<div class="stripe">
+<section id="platform" aria-labelledby="platform-h2">
   <div class="section">
-    <div class="metrics-box">
-      <div class="metrics-inner">
+    <div class="overview-box">
+      <div class="overview-inner">
 
-        <div class="metrics-header">
+        <div class="overview-header">
           <div>
-            <p class="overline" style="margin-bottom:10px;">Live Demo — Counselling &amp; Client Module</p>
-            <h2 id="metrics-h2" style="font-size:clamp(24px,3.5vw,38px);">
-              Real workflows.<br />Real service data.
+            <span class="overline overline-block">Demo Environment — Counselling Module</span>
+            <h2 id="platform-h2" class="h2-platform">
+              Real structure.<br/>Real workflows.
             </h2>
           </div>
-          <a href="#cta" class="btn btn-primary btn-sm" style="align-self:flex-start;">
-            View Full Demo
-          </a>
+          <a href="#cta" class="btn btn-primary btn-sm btn-self-start">View Full Demo</a>
         </div>
 
         <div class="metrics-grid">
           <div class="metric-card">
             <div class="metric-num c-blue">3</div>
-            <div class="metric-label">Total Sessions</div>
+            <div class="metric-label">Active Sessions</div>
           </div>
           <div class="metric-card">
             <div class="metric-num c-amber">2</div>
-            <div class="metric-label">Follow-ups Required</div>
+            <div class="metric-label">Follow-ups Pending</div>
           </div>
           <div class="metric-card">
             <div class="metric-num c-red">1</div>
@@ -906,19 +829,18 @@
           </div>
         </div>
 
-        <!-- Live record -->
-        <div class="live-record">
-          <span class="badge badge-live" style="flex-shrink:0;"><span class="ping" aria-hidden="true"></span>Sample record</span>
-          <span style="font-weight:600; color:var(--text);">COU-2026-003</span>
-          <span style="color:var(--text-muted);">·</span>
+        <div class="sample-record" aria-label="Sample counselling record">
+          <span class="badge badge-live badge-noshrink"><span class="ping" aria-hidden="true"></span>Sample record</span>
+          <span class="record-id">COU-2026-003</span>
+          <span class="sep">·</span>
           <span>Client: Sarah Lim</span>
-          <span style="color:var(--text-muted);">·</span>
+          <span class="sep">·</span>
           <span>Counsellor: Rachel Ong</span>
-          <span style="color:var(--text-muted);">·</span>
+          <span class="sep">·</span>
           <span>Session: Follow-up #2</span>
-          <span style="color:var(--text-muted);">·</span>
-          <span>Risk: <strong style="color:#D97706;">Medium</strong></span>
-          <span style="color:var(--text-muted);">·</span>
+          <span class="sep">·</span>
+          <span>Risk: <strong class="mdr-amber">Medium</strong></span>
+          <span class="sep">·</span>
           <span>Status: <strong class="c-green">Completed</strong></span>
         </div>
 
@@ -929,64 +851,103 @@
 </div>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
-     PLATFORM FEATURES
-══════════════════════════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════════════════════
+     PLATFORM CAPABILITIES
+════════════════════════════════════════════════════════════════════ -->
 <section id="features" aria-labelledby="features-h2">
   <div class="section">
-    <div class="section-head">
-      <p class="overline">Shared Platform Capabilities</p>
-      <h2 id="features-h2">Everything your organisation needs.</h2>
-      <p>Core capabilities built into every module — no add-ons, no hidden configuration, no extra cost.</p>
+    <div class="section-head centered">
+      <span class="overline">Shared Platform Capabilities</span>
+      <h2 id="features-h2">Built for structured, accountable operations.</h2>
+      <p>Core capabilities included across every module — no add-ons, no hidden configuration, no extra cost.</p>
     </div>
 
     <div class="features-grid">
 
       <div class="card feature-card">
-        <div class="feature-icon" aria-hidden="true">🔐</div>
+        <div class="feature-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
         <div class="feature-body">
           <h3>Role-Based Access Control</h3>
-          <p>Nine discrete permission levels — View, Create, Edit, Delete, Workflow, Upload, Email, Export, and Configure — ensuring every team member sees exactly what they need.</p>
+          <p>Nine discrete permission levels — View, Create, Edit, Delete, Workflow, Upload, Email, Export, and Configure — ensuring each team member accesses only what they need.</p>
         </div>
       </div>
 
       <div class="card feature-card">
-        <div class="feature-icon" aria-hidden="true">⚡</div>
+        <div class="feature-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </div>
         <div class="feature-body">
           <h3>Seamless Module Navigation</h3>
-          <p>Move between Volunteer, Intake, Counselling, Admin, and Training modules instantly — single sign-on, persistent session, no re-authentication.</p>
+          <p>Move between Volunteer, Intake, Counselling, Admin, and Training modules instantly — single sign-on, persistent session, no re-authentication required.</p>
         </div>
       </div>
 
       <div class="card feature-card">
-        <div class="feature-icon" aria-hidden="true">📋</div>
+        <div class="feature-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
         <div class="feature-body">
           <h3>Unified Activity &amp; Audit Log</h3>
-          <p>Real-time activity feed and complete audit trail across all modules — giving operations and compliance teams full visibility at all times.</p>
+          <p>Real-time activity feed and complete audit trail across all modules — providing compliance teams and leadership with full operational visibility at all times.</p>
         </div>
       </div>
 
       <div class="card feature-card">
-        <div class="feature-icon" aria-hidden="true">📄</div>
+        <div class="feature-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
         <div class="feature-body">
           <h3>Print-Ready Report Export</h3>
-          <p>Generate structured case summaries, governance reports, and service delivery documents ready for stakeholder review, board submission, or regulatory requirements.</p>
+          <p>Generate structured case summaries, governance reports, and service delivery documents ready for board submission, stakeholder review, or regulatory compliance.</p>
         </div>
       </div>
 
       <div class="card feature-card">
-        <div class="feature-icon" aria-hidden="true">☁️</div>
+        <div class="feature-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+          </svg>
+        </div>
         <div class="feature-body">
           <h3>Managed Cloud Deployment</h3>
-          <p>Fully hosted with no server management, no infrastructure overhead, and no technical team required. Go live quickly and stay operational without IT complexity.</p>
+          <p>Fully hosted with no server management, no infrastructure overhead, and no IT team required. Go live quickly and stay operational without technical complexity.</p>
         </div>
       </div>
 
       <div class="card feature-card">
-        <div class="feature-icon" aria-hidden="true">⚙️</div>
+        <div class="feature-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"/>
+            <line x1="4" y1="10" x2="4" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="12"/>
+            <line x1="12" y1="8"  x2="12" y2="3"/>
+            <line x1="20" y1="21" x2="20" y2="16"/>
+            <line x1="20" y1="12" x2="20" y2="3"/>
+            <line x1="1"  y1="14" x2="7"  y2="14"/>
+            <line x1="9"  y1="8"  x2="15" y2="8"/>
+            <line x1="17" y1="16" x2="23" y2="16"/>
+          </svg>
+        </div>
         <div class="feature-body">
           <h3>Configurable Workflows</h3>
-          <p>Adapt intake forms, session fields, permission structures, and approval processes to fit your organisation's existing policies and service delivery model.</p>
+          <p>Adapt intake forms, session fields, permission structures, and approval processes to match your organisation's existing policies and service delivery model.</p>
         </div>
       </div>
 
@@ -995,64 +956,58 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
+<!-- ════════════════════════════════════════════════════════════════════
      CTA
-══════════════════════════════════════════════════════════════════════ -->
+════════════════════════════════════════════════════════════════════ -->
+<div class="stripe">
 <section id="cta" aria-labelledby="cta-h2">
   <div class="section">
     <div class="cta-box">
-      <div style="position:relative; z-index:1;">
-        <p class="overline" style="margin-bottom:12px;">Ready to transform your operations?</p>
-        <h2 id="cta-h2" class="cta-h2" style="margin-bottom:16px;">
-          See ICOIP in action today.
-        </h2>
-        <p class="lead" style="max-width:500px; margin:0 auto 36px; font-size:16px;">
-          Book a live walkthrough of the full platform — all five modules, real workflows, live service data. No commitment required.
-        </p>
-        <div class="cta-ctas">
-          <a
-            href="mailto:admin.demo@icoip.app?subject=ICOIP%20Demo%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20live%20demonstration%20of%20ICOIP."
-            class="btn btn-primary"
-            style="font-size:16px; padding:15px 32px;"
-          >
-            Request a Demo
-          </a>
-          <a
-            href="https://script.google.com/macros/s/AKfycbwvqQ8UlVOoXN4UVvCnRmNnVKL99Jp9t6DsBZCrDMFqErNwdP_VmcLm0ahU6dx2-hI/exec"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-secondary"
-            style="font-size:16px; padding:15px 32px;"
-          >
-            Open Live Demo ↗
-          </a>
-        </div>
-        <p class="cta-meta">
-          Full admin access in demo mode &nbsp;·&nbsp; All 5 modules included &nbsp;·&nbsp; No setup required
-        </p>
+      <span class="overline overline-block-12">Request a Demonstration</span>
+      <h2 id="cta-h2" class="cta-h2 cta-h2-mb">See ICOIP in action.</h2>
+      <p class="cta-sub cta-sub-mb">
+        Book a live walkthrough of the full platform — all five modules, real workflows, and live service data. No commitment required.
+      </p>
+      <div class="cta-ctas cta-ctas-mb">
+        <a
+          href="mailto:admin.demo@icoip.app?subject=ICOIP%20Demo%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20live%20demonstration%20of%20ICOIP."
+          class="btn btn-primary btn-lg"
+        >
+          Request a Demo
+        </a>
+        <a
+          href="https://script.google.com/macros/s/AKfycbwvqQ8UlVOoXN4UVvCnRmNnVKL99Jp9t6DsBZCrDMFqErNwdP_VmcLm0ahU6dx2-hI/exec"
+          target="_blank" rel="noopener noreferrer"
+          class="btn btn-secondary btn-lg"
+        >
+          Open Live Demo
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
+      <p class="cta-meta">Full admin access in demo mode &nbsp;·&nbsp; All 5 modules included &nbsp;·&nbsp; No setup required</p>
     </div>
   </div>
 </section>
+</div>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
+<!-- ════════════════════════════════════════════════════════════════════
      DEMO PORTALS
-══════════════════════════════════════════════════════════════════════ -->
-<div class="section-bg">
+════════════════════════════════════════════════════════════════════ -->
 <section id="demo" aria-labelledby="demo-h2">
   <div class="section">
-    <div class="section-head">
-      <p class="overline">All Modules Live</p>
+    <div class="section-head centered">
+      <span class="overline">All Modules — Live Demo Access</span>
       <h2 id="demo-h2">Access any module directly.</h2>
-      <p>Each portal is independently accessible. Explore the platform at your own pace — full demo data pre-loaded.</p>
+      <p>Each portal is independently accessible. Explore the platform at your own pace with pre-loaded demo data across all five modules.</p>
     </div>
 
-    <!-- Demo credentials -->
     <div class="creds-card" aria-label="Demo access credentials">
       <div class="creds-top">
         <span class="badge badge-live"><span class="ping" aria-hidden="true"></span>Demo Mode Active</span>
-        <span style="font-size:12px; color:var(--text-muted);">Use the credentials below to log in to any portal</span>
+        <span class="text-hint">Use these credentials to log in to any portal</span>
       </div>
       <div class="creds-grid">
         <div class="cred-item">
@@ -1072,9 +1027,7 @@
           <div class="cred-value">All 5 — VOL · INT · COU · ADM · TRN</div>
         </div>
       </div>
-      <p class="creds-note">
-        All portals below are open in full admin demo mode. Sample data is pre-loaded across all five modules and can be reset at any time from the Admin panel.
-      </p>
+      <p class="creds-note">All portals below are open in full admin demo mode. Sample data is pre-loaded across all five modules and can be reset at any time from the Admin panel.</p>
     </div>
 
     <div class="portals-grid">
@@ -1085,12 +1038,23 @@
         class="card portal-link"
         aria-label="Open Master Suite Demo"
       >
-        <span class="portal-emoji" aria-hidden="true">🗂️</span>
-        <div>
+        <div class="portal-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </div>
+        <div class="portal-body">
           <div class="portal-title">Master Suite Demo</div>
           <div class="portal-sub">All modules — full platform overview</div>
         </div>
-        <span class="portal-arrow" aria-hidden="true">↗</span>
+        <div class="portal-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </a>
 
       <a
@@ -1099,12 +1063,23 @@
         class="card portal-link"
         aria-label="Open Volunteer Management portal"
       >
-        <span class="portal-emoji" aria-hidden="true">🤝</span>
-        <div>
+        <div class="portal-icon portal-icon--vol" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="portal-body">
           <div class="portal-title">Volunteer Management</div>
           <div class="portal-sub">Module VOL — volunteer operations</div>
         </div>
-        <span class="portal-arrow" aria-hidden="true">↗</span>
+        <div class="portal-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </a>
 
       <a
@@ -1113,27 +1088,48 @@
         class="card portal-link"
         aria-label="Open Intake and Referral portal"
       >
-        <span class="portal-emoji" aria-hidden="true">🧾</span>
-        <div>
+        <div class="portal-icon portal-icon--int" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+        </div>
+        <div class="portal-body">
           <div class="portal-title">Intake &amp; Referral</div>
           <div class="portal-sub">Module INT — client intake &amp; referrals</div>
         </div>
-        <span class="portal-arrow" aria-hidden="true">↗</span>
+        <div class="portal-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </a>
 
       <a
         href="https://script.google.com/macros/s/AKfycbx9g3ptENk5V4x4v7ObNEiSJHvKy1HUOs1qwWELCJwyu7A9WhU4crQ6Zhoigcj1yfWn/exec"
         target="_blank" rel="noopener noreferrer"
-        class="card portal-link"
-        style="border-color:#BFDBFE;"
+        class="card portal-link portal-link--cou"
         aria-label="Open Counselling and Client Services portal"
       >
-        <span class="portal-emoji" aria-hidden="true">💬</span>
-        <div>
-          <div class="portal-title">Counselling &amp; Client Services</div>
-          <div class="portal-sub">Module COU — sessions &amp; case management <span class="badge badge-live" style="font-size:10px; padding:2px 7px; vertical-align:middle; margin-left:4px;"><span class="ping" style="width:5px;height:5px;" aria-hidden="true"></span>Active</span></div>
+        <div class="portal-icon portal-icon--cou" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
         </div>
-        <span class="portal-arrow" aria-hidden="true">↗</span>
+        <div class="portal-body">
+          <div class="portal-title">Counselling &amp; Client Services</div>
+          <div class="portal-sub">
+            Module COU — sessions &amp; case management
+            <span class="badge badge-live badge-xs"><span class="ping" aria-hidden="true"></span>Active</span>
+          </div>
+        </div>
+        <div class="portal-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </a>
 
       <a
@@ -1142,12 +1138,20 @@
         class="card portal-link"
         aria-label="Open Admin Governance portal"
       >
-        <span class="portal-emoji" aria-hidden="true">🛡️</span>
-        <div>
+        <div class="portal-icon portal-icon--adm" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="portal-body">
           <div class="portal-title">Admin Governance</div>
           <div class="portal-sub">Module ADM — oversight &amp; controls</div>
         </div>
-        <span class="portal-arrow" aria-hidden="true">↗</span>
+        <div class="portal-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </a>
 
       <a
@@ -1156,51 +1160,112 @@
         class="card portal-link"
         aria-label="Open Training and Curriculum portal"
       >
-        <span class="portal-emoji" aria-hidden="true">📚</span>
-        <div>
+        <div class="portal-icon portal-icon--trn" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </div>
+        <div class="portal-body">
           <div class="portal-title">Training &amp; Curriculum</div>
           <div class="portal-sub">Module TRN — workforce development</div>
         </div>
-        <span class="portal-arrow" aria-hidden="true">↗</span>
+        <div class="portal-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </a>
 
     </div>
   </div>
 </section>
-</div>
 
 </main>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
+<!-- ════════════════════════════════════════════════════════════════════
      FOOTER
-══════════════════════════════════════════════════════════════════════ -->
+════════════════════════════════════════════════════════════════════ -->
 <footer role="contentinfo">
-  <div class="footer-inner">
-    <div class="footer-logo">
-      <div class="footer-logo-mark" aria-hidden="true">IC</div>
-      <span class="footer-logo-name">ICOIP</span>
-      <span class="footer-right" style="margin-left:4px;">— Integrated Care &amp; Operations Intelligence Programme</span>
+  <div class="footer-top">
+
+    <div>
+      <div class="footer-logo">
+        <div class="footer-logo-mark" aria-hidden="true">IC</div>
+        <span class="footer-logo-name">ICOIP</span>
+      </div>
+      <p class="footer-brand-desc">
+        Integrated Care &amp; Operations Intelligence Programme — a unified operations platform purpose-built for social service organisations.
+      </p>
     </div>
-    <div class="footer-right">Purpose-built for social service organisations</div>
+
+    <div>
+      <p class="footer-col-title">Platform</p>
+      <div class="footer-col-links">
+        <a href="#modules">Modules</a>
+        <a href="#features">Capabilities</a>
+        <a href="#platform">Platform Overview</a>
+        <a href="#demo">Demo Access</a>
+      </div>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Modules</p>
+      <div class="footer-col-links">
+        <a href="https://script.google.com/macros/s/AKfycbyBtrFEkLnnlGPYRNb_GyB4puln6m_Gl7aldzscrH3OPrSbhmD6CFlBmlMTO73bEx93/exec" target="_blank" rel="noopener noreferrer">Volunteer Management</a>
+        <a href="https://script.google.com/macros/s/AKfycbwOknQ1OUzbGzPITaKDfd4KPgHAyDYZa1D6RUzbt4mQwbqhKcO5sX64v0QX2Sno4oH8/exec" target="_blank" rel="noopener noreferrer">Intake &amp; Referral</a>
+        <a href="https://script.google.com/macros/s/AKfycbx9g3ptENk5V4x4v7ObNEiSJHvKy1HUOs1qwWELCJwyu7A9WhU4crQ6Zhoigcj1yfWn/exec" target="_blank" rel="noopener noreferrer">Counselling</a>
+        <a href="https://script.google.com/macros/s/AKfycbwK2t_AMjkd4k6jRptx7O9dF0Dh8HoVj6HVnlmme0C7QmO7zpP-oy891cUyTaxy4l40/exec" target="_blank" rel="noopener noreferrer">Admin Governance</a>
+        <a href="https://script.google.com/macros/s/AKfycbzLCyX4TYykUkLYc3wRnDHobuqGaExEEJEZvcoQXrMmNb4e3u877hMMaJV81I6uE8Ke/exec" target="_blank" rel="noopener noreferrer">Training &amp; Curriculum</a>
+      </div>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Contact</p>
+      <div class="footer-col-links">
+        <a href="mailto:admin.demo@icoip.app?subject=ICOIP%20Demo%20Request">Request a Demo</a>
+        <a href="mailto:admin.demo@icoip.app">admin.demo@icoip.app</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-legal">&copy; 2026 ICOIP — Integrated Care &amp; Operations Intelligence Programme. All rights reserved.</p>
+    <p class="footer-legal">Purpose-built for social service organisations.</p>
   </div>
 </footer>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════
-     MINIMAL JS — nav scroll state + smooth anchor offset
-══════════════════════════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════════════════════
+     JS — nav scroll state + mobile menu + smooth anchor offset
+════════════════════════════════════════════════════════════════════ -->
 <script>
   (function () {
     // Sticky nav shadow on scroll
     var nav = document.getElementById('nav');
-    function onScroll() {
-      nav.classList.toggle('scrolled', window.scrollY > 10);
-    }
+    function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 8); }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // Offset smooth scroll for fixed nav height (64px + 8px gap)
+    // Mobile hamburger toggle
+    var hamburger = document.getElementById('hamburger-btn');
+    var mobileNav = document.getElementById('nav-mobile');
+    if (hamburger && mobileNav) {
+      hamburger.addEventListener('click', function () {
+        var isOpen = mobileNav.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+      mobileNav.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          mobileNav.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    // Offset smooth scroll for fixed nav (60px + 8px buffer)
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) {
         var id = a.getAttribute('href').slice(1);
@@ -1208,7 +1273,7 @@
         var target = document.getElementById(id);
         if (!target) return;
         e.preventDefault();
-        var top = target.getBoundingClientRect().top + window.scrollY - 80;
+        var top = target.getBoundingClientRect().top + window.scrollY - 76;
         window.scrollTo({ top: top, behavior: 'smooth' });
       });
     });
